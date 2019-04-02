@@ -1,0 +1,1 @@
+../src0/base_1241__rand_init.go

@@ -1,0 +1,1 @@
+../src0/base_1999__encode_decode__bin.go

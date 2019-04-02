@@ -1,0 +1,1 @@
+../src0/base_1800__FnDnSnCn_const_struct.go

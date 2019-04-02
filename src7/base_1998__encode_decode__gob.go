@@ -1,0 +1,1 @@
+../src0/base_1998__encode_decode__gob.go

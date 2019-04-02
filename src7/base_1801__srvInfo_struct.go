@@ -1,0 +1,1 @@
+../src0/base_1801__srvInfo_struct.go
