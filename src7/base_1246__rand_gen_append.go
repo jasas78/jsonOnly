@@ -1,0 +1,1 @@
+../src0/base_1246__rand_gen_append.go
