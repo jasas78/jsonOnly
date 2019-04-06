@@ -1,0 +1,1 @@
+../src0/base_1122__Fprintf.go
