@@ -32,7 +32,8 @@ type _TuExtTimer struct {
 } // _TuExtTimer
 
 var (
-	_VconfigFnWaitDn_json _TsrvInfo = _TsrvInfo{
+	_CHpr                 *chan _TtcpNodeDataSend = nil
+	_VconfigFnWaitDn_json _TsrvInfo               = _TsrvInfo{
 		name:       "FnWaitDn",
 		refreshUri: "https://raw.githubusercontent.com/jasas78/jsonOnly/master/json/FnWaitDn.json.rand",
 		UriArrs:    []string{"127.0.0.1:32001", "127.0.0.1:32002"},
@@ -63,29 +64,29 @@ func init() {
 	_VconfigDn2Cn_gob.refreshUri = "https://raw.githubusercontent.com/jasas78/jsonOnly/master/json/Dn2Cn.gob.rand"
 }
 
-func _Ftry_download_rand_json_and_show_the_reult(___Vmsg string, ___KeyF *[]byte, ___VsrvInfo *_TsrvInfo, ___VrecoverObj *_TsrvInfo) {
+func _Ftry_download_rand_json_and_show_the_reult(___Vmsg string, ___KeyF []byte, ___VsrvInfo _TsrvInfo, ___VrecoverObjLp *_TsrvInfo) {
 
 	___VdownUri := ___VsrvInfo.refreshUri
 	//___Vkey := ___VsrvInfo.K256
 
-	//_, __Verr := _Ftry_download_rand_json01(___VdownUri, &___Vkey, ___VrecoverObj)
-	_, __Verr := _Ftry_download_rand_json01(___VdownUri, ___KeyF, ___VrecoverObj)
+	//_, __Verr := _Ftry_download_rand_json01(___VdownUri, &___Vkey, ___VrecoverObjLp)
+	_, __Verr := _Ftry_download_rand_json01(___VdownUri, ___KeyF, ___VrecoverObjLp)
 	if nil == __Verr {
-		_FpfN(___Vmsg+" 893481 01 : ok : %s , %v ", ___VdownUri, ___VrecoverObj)
+		_FpfN(___Vmsg+" 893481 01 : ok : %s , %v ", ___VdownUri, ___VrecoverObjLp)
 	} else {
 		_FpfN(___Vmsg+" 893481 02 : Error : %s , %v ", ___VdownUri, __Verr)
 	}
 
 } // _Ftry_download_rand_json_and_show_the_reult
 
-func _Ftry_download_rand_gob_and_show_the_reult(___Vmsg string, ___KeyF *[]byte, ___VsrvInfo *_TsrvInfo, ___VrecoverObj *_TsrvInfo) {
+func _Ftry_download_rand_gob_and_show_the_reult(___Vmsg string, ___KeyF []byte, ___VsrvInfo _TsrvInfo, ___VrecoverObjLp *_TsrvInfo) {
 
 	___VdownUri := ___VsrvInfo.refreshUri
 
-	//_, __Verr := _Ftry_download_rand_json01(___VdownUri, ___KeyF, ___VrecoverObj)
-	_, __Verr := _Ftry_download_rand_gob01(___VdownUri, ___KeyF, ___VrecoverObj)
+	//_, __Verr := _Ftry_download_rand_json01(___VdownUri, ___KeyF, ___VrecoverObjLp)
+	_, __Verr := _Ftry_download_rand_gob01(___VdownUri, ___KeyF, ___VrecoverObjLp)
 	if nil == __Verr {
-		_FpfN(___Vmsg+" 893481 03 : ok : %s , %v ", ___VdownUri, ___VrecoverObj)
+		_FpfN(___Vmsg+" 893481 03 : ok : %s , %v ", ___VdownUri, ___VrecoverObjLp)
 	} else {
 		_FpfN(___Vmsg+" 893481 04 : Error : %s , %v ", ___VdownUri, __Verr)
 	}
@@ -99,13 +100,13 @@ func main() {
 	//_FtestLen01()
 
 	//_FtestER__write_json_and_rand_Exit
-	_Ftry_gen_json01("FnWaitDn", &_Vpasswd_udp_FnWaitDn_download_config, &_VconfigFnWaitDn_json)
-	_Ftry_gen_json01("Dn2Cn", &_Vpasswd_udp_Dn2Cn_download_config, &_VconfigDn2Cn_json)
+	_Ftry_gen_json01("FnWaitDn", _Vpasswd_udp_FnWaitDn_download_config, &_VconfigFnWaitDn_json)
+	_Ftry_gen_json01("Dn2Cn", _Vpasswd_udp_Dn2Cn_download_config, &_VconfigDn2Cn_json)
 
 	// _FtestER__write_gob_and_rand_Exit
-	_Ftry_gen_gob01("FnWaitDn", &_Vpasswd_udp_FnWaitDn_download_config, &_VconfigFnWaitDn_gob)
+	_Ftry_gen_gob01("FnWaitDn", _Vpasswd_udp_FnWaitDn_download_config, &_VconfigFnWaitDn_gob)
 	//_FpfNex(" 838191111111 ")
-	_Ftry_gen_gob01("Dn2Cn", &_Vpasswd_udp_Dn2Cn_download_config, &_VconfigDn2Cn_gob)
+	_Ftry_gen_gob01("Dn2Cn", _Vpasswd_udp_Dn2Cn_download_config, &_VconfigDn2Cn_gob)
 
 	var (
 		_Vconfig_tmp__Dn2Fn _TsrvInfo
@@ -113,14 +114,14 @@ func main() {
 	)
 
 	_FpfN("")
-	_Ftry_download_rand_json_and_show_the_reult(" 839121 01 ", &_Vpasswd_udp_FnWaitDn_download_config, &_VconfigFnWaitDn_json, &_Vconfig_tmp__Fn)
-	_Ftry_download_rand_json_and_show_the_reult(" 839121 02 ", &_Vpasswd_udp_Dn2Cn_download_config, &_VconfigDn2Cn_json, &_Vconfig_tmp__Dn2Fn)
-	_Ftry_download_rand_json_and_show_the_reult(" 839121 03 ", &_Vpasswd_udp_FnWaitDn_download_config, &_VconfigDn2Cn_json, &_Vconfig_tmp__Dn2Fn)
+	_Ftry_download_rand_json_and_show_the_reult(" 839121 01 ", _Vpasswd_udp_FnWaitDn_download_config, _VconfigFnWaitDn_json, &_Vconfig_tmp__Fn)
+	_Ftry_download_rand_json_and_show_the_reult(" 839121 02 ", _Vpasswd_udp_Dn2Cn_download_config, _VconfigDn2Cn_json, &_Vconfig_tmp__Dn2Fn)
+	_Ftry_download_rand_json_and_show_the_reult(" 839121 03 ", _Vpasswd_udp_FnWaitDn_download_config, _VconfigDn2Cn_json, &_Vconfig_tmp__Dn2Fn)
 	_FpfN("")
 
-	_Ftry_download_rand_gob_and_show_the_reult(" 839121 11 ", &_Vpasswd_udp_FnWaitDn_download_config, &_VconfigFnWaitDn_gob, &_Vconfig_tmp__Fn)
-	_Ftry_download_rand_gob_and_show_the_reult(" 839121 12 ", &_Vpasswd_udp_Dn2Cn_download_config, &_VconfigDn2Cn_gob, &_Vconfig_tmp__Dn2Fn)
-	_Ftry_download_rand_gob_and_show_the_reult(" 839121 13 ", &_Vpasswd_udp_FnWaitDn_download_config, &_VconfigDn2Cn_gob, &_Vconfig_tmp__Dn2Fn)
+	_Ftry_download_rand_gob_and_show_the_reult(" 839121 11 ", _Vpasswd_udp_FnWaitDn_download_config, _VconfigFnWaitDn_gob, &_Vconfig_tmp__Fn)
+	_Ftry_download_rand_gob_and_show_the_reult(" 839121 12 ", _Vpasswd_udp_Dn2Cn_download_config, _VconfigDn2Cn_gob, &_Vconfig_tmp__Dn2Fn)
+	_Ftry_download_rand_gob_and_show_the_reult(" 839121 13 ", _Vpasswd_udp_FnWaitDn_download_config, _VconfigDn2Cn_gob, &_Vconfig_tmp__Dn2Fn)
 	_FpfN("")
 
 	// use a fake key to test the err
