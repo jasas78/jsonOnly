@@ -40,7 +40,7 @@ var (
 		//UdstAddr: []net.UDPAddr{
 		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 32001, ""},
 		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 32002, ""}},
-		K256: [][]byte{_Vpasswd_udp_Fn_waitForCliens01, _Vpasswd_udp_Fn_waitForCliens02}}
+		K256: [][]byte{_Vpasswd_udp_Fn_waitForCliens01_Dn, _Vpasswd_udp_Fn_waitForCliens02_Cn}}
 
 	_VconfigDn2Cn_json _TsrvInfo = _TsrvInfo{
 		name:       "Dn2Cn",
