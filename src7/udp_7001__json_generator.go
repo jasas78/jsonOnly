@@ -10,15 +10,6 @@ type _Tconfig struct {
 } //    _Tconfig
 type _Tself struct {
 	ProjName string
-	//
-	//     progPath string
-	//     progMd5  _Tb128 // md5sum    : 16 byte : 727bf338cf523b90baccd24cca30b919
-	//     progSha  _Tb256 // sha256sum : 32 byte : 2c6e3b458d5c482bc52a1d7d4f5a7d7766381c9f07d9b32ca605ae45b4e473f5
-	//
-	//     startTime    time.Time
-	//     startTimEsha _Tb256
-	//
-	//     debugEnabled bool
 } //    _Tself
 
 type _TuExtMRead struct {
@@ -37,29 +28,19 @@ var (
 		name:       "FnWaitDn",
 		refreshUri: "https://raw.githubusercontent.com/jasas78/jsonOnly/master/json/FnWaitDn.json.rand",
 		UriArrs:    []string{"127.0.0.1:32001", "127.0.0.1:32002"},
-		//UdstAddr: []net.UDPAddr{
-		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 32001, ""},
-		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 32002, ""}},
-		K256: [][]byte{_Vpasswd_udp_Fn_waitForCliens01_Dn, _Vpasswd_udp_Fn_waitForCliens01_Dn}}
+		K256:       [][]byte{_Vpasswd_udp_Fn_waitForCliens01_Dn, _Vpasswd_udp_Fn_waitForCliens01_Dn}}
 
 	_VconfigFnWaitCn_json _TsrvInfo = _TsrvInfo{
 		name:       "FnWaitCn",
 		refreshUri: "https://raw.githubusercontent.com/jasas78/jsonOnly/master/json/FnWaitCn.json.rand",
-		UriArrs:    []string{"127.0.0.1:32001", "127.0.0.1:32002"},
-		//UdstAddr: []net.UDPAddr{
-		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 32001, ""},
-		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 32002, ""}},
-		K256: [][]byte{_Vpasswd_udp_Fn_waitForCliens02_Cn, _Vpasswd_udp_Fn_waitForCliens02_Cn}}
+		UriArrs:    []string{"127.0.0.1:48881", "127.0.0.1:48882"},
+		K256:       [][]byte{_Vpasswd_udp_Fn_waitForCliens02_Cn, _Vpasswd_udp_Fn_waitForCliens02_Cn}}
 
 	_VconfigDn2Cn_json _TsrvInfo = _TsrvInfo{
 		name:       "Dn2Cn",
 		refreshUri: "https://raw.githubusercontent.com/jasas78/jsonOnly/master/json/Dn2Cn.json.rand",
 		UriArrs:    []string{"127.0.0.1:31001", "127.0.0.1:31002", "127.0.0.1:31003"},
-		//UdstAddr: []net.UDPAddr{
-		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 31001, ""},
-		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 31002, ""},
-		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 31003, ""}},
-		K256: [][]byte{_Vpasswd_udp_Cn_waitForCliens01, _Vpasswd_udp_Cn_waitForCliens02}}
+		K256:       [][]byte{_Vpasswd_udp_Cn_waitForCliens01, _Vpasswd_udp_Cn_waitForCliens02}}
 
 	_VconfigFnWaitDn_gob _TsrvInfo = _VconfigFnWaitDn_json
 	_VconfigFnWaitCn_gob _TsrvInfo = _VconfigFnWaitCn_json
