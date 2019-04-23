@@ -112,6 +112,7 @@ func main() {
 
 	//_FtestER__write_json_and_rand_Exit
 	_Ftry_gen_json01("FnWaitDn", _Vpasswd_udp_FnWaitDn_download_config, &_VconfigFnWaitDn_json)
+	_Ftry_gen_json01("FnWaitCn", _Vpasswd_udp_FnWaitCn_download_config, &_VconfigFnWaitCn_json)
 	_Ftry_gen_json01("Dn2Cn", _Vpasswd_udp_Dn2Cn_download_config, &_VconfigDn2Cn_json)
 
 	// _FtestER__write_gob_and_rand_Exit
