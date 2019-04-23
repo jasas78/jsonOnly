@@ -40,7 +40,16 @@ var (
 		//UdstAddr: []net.UDPAddr{
 		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 32001, ""},
 		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 32002, ""}},
-		K256: [][]byte{_Vpasswd_udp_Fn_waitForCliens01_Dn, _Vpasswd_udp_Fn_waitForCliens02_Cn}}
+		K256: [][]byte{_Vpasswd_udp_Fn_waitForCliens01_Dn, _Vpasswd_udp_Fn_waitForCliens01_Dn}}
+
+	_VconfigFnWaitCn_json _TsrvInfo = _TsrvInfo{
+		name:       "FnWaitCn",
+		refreshUri: "https://raw.githubusercontent.com/jasas78/jsonOnly/master/json/FnWaitCn.json.rand",
+		UriArrs:    []string{"127.0.0.1:32001", "127.0.0.1:32002"},
+		//UdstAddr: []net.UDPAddr{
+		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 32001, ""},
+		//	net.UDPAddr{net.IPv4(127, 0, 0, 1), 32002, ""}},
+		K256: [][]byte{_Vpasswd_udp_Fn_waitForCliens02_Cn, _Vpasswd_udp_Fn_waitForCliens02_Cn}}
 
 	_VconfigDn2Cn_json _TsrvInfo = _TsrvInfo{
 		name:       "Dn2Cn",
@@ -53,6 +62,7 @@ var (
 		K256: [][]byte{_Vpasswd_udp_Cn_waitForCliens01, _Vpasswd_udp_Cn_waitForCliens02}}
 
 	_VconfigFnWaitDn_gob _TsrvInfo = _VconfigFnWaitDn_json
+	_VconfigFnWaitCn_gob _TsrvInfo = _VconfigFnWaitCn_json
 	_VconfigDn2Cn_gob    _TsrvInfo = _VconfigDn2Cn_json
 
 	_Vconfig _Tconfig
@@ -61,6 +71,7 @@ var (
 
 func init() {
 	_VconfigFnWaitDn_gob.refreshUri = "https://raw.githubusercontent.com/jasas78/jsonOnly/master/json/FnWaitDn.gob.rand"
+	_VconfigFnWaitCn_gob.refreshUri = "https://raw.githubusercontent.com/jasas78/jsonOnly/master/json/FnWaitCn.gob.rand"
 	_VconfigDn2Cn_gob.refreshUri = "https://raw.githubusercontent.com/jasas78/jsonOnly/master/json/Dn2Cn.gob.rand"
 }
 
@@ -105,6 +116,7 @@ func main() {
 
 	// _FtestER__write_gob_and_rand_Exit
 	_Ftry_gen_gob01("FnWaitDn", _Vpasswd_udp_FnWaitDn_download_config, &_VconfigFnWaitDn_gob)
+	_Ftry_gen_gob01("FnWaitCn", _Vpasswd_udp_FnWaitCn_download_config, &_VconfigFnWaitCn_gob)
 	//_FpfNex(" 838191111111 ")
 	_Ftry_gen_gob01("Dn2Cn", _Vpasswd_udp_Dn2Cn_download_config, &_VconfigDn2Cn_gob)
 
@@ -115,13 +127,15 @@ func main() {
 
 	_FpfN("")
 	_Ftry_download_rand_json_and_show_the_reult(" 839121 01 ", _Vpasswd_udp_FnWaitDn_download_config, _VconfigFnWaitDn_json, &_Vconfig_tmp__Fn)
-	_Ftry_download_rand_json_and_show_the_reult(" 839121 02 ", _Vpasswd_udp_Dn2Cn_download_config, _VconfigDn2Cn_json, &_Vconfig_tmp__Dn2Fn)
-	_Ftry_download_rand_json_and_show_the_reult(" 839121 03 ", _Vpasswd_udp_FnWaitDn_download_config, _VconfigDn2Cn_json, &_Vconfig_tmp__Dn2Fn)
+	_Ftry_download_rand_json_and_show_the_reult(" 839121 02 ", _Vpasswd_udp_FnWaitCn_download_config, _VconfigFnWaitCn_json, &_Vconfig_tmp__Fn)
+	_Ftry_download_rand_json_and_show_the_reult(" 839121 03 ", _Vpasswd_udp_Dn2Cn_download_config, _VconfigDn2Cn_json, &_Vconfig_tmp__Dn2Fn)
+	_Ftry_download_rand_json_and_show_the_reult(" 839121 04 ", _Vpasswd_udp_FnWaitDn_download_config, _VconfigDn2Cn_json, &_Vconfig_tmp__Dn2Fn)
 	_FpfN("")
 
 	_Ftry_download_rand_gob_and_show_the_reult(" 839121 11 ", _Vpasswd_udp_FnWaitDn_download_config, _VconfigFnWaitDn_gob, &_Vconfig_tmp__Fn)
-	_Ftry_download_rand_gob_and_show_the_reult(" 839121 12 ", _Vpasswd_udp_Dn2Cn_download_config, _VconfigDn2Cn_gob, &_Vconfig_tmp__Dn2Fn)
-	_Ftry_download_rand_gob_and_show_the_reult(" 839121 13 ", _Vpasswd_udp_FnWaitDn_download_config, _VconfigDn2Cn_gob, &_Vconfig_tmp__Dn2Fn)
+	_Ftry_download_rand_gob_and_show_the_reult(" 839121 12 ", _Vpasswd_udp_FnWaitCn_download_config, _VconfigFnWaitCn_gob, &_Vconfig_tmp__Fn)
+	_Ftry_download_rand_gob_and_show_the_reult(" 839121 13 ", _Vpasswd_udp_Dn2Cn_download_config, _VconfigDn2Cn_gob, &_Vconfig_tmp__Dn2Fn)
+	_Ftry_download_rand_gob_and_show_the_reult(" 839121 14 ", _Vpasswd_udp_FnWaitDn_download_config, _VconfigDn2Cn_gob, &_Vconfig_tmp__Dn2Fn)
 	_FpfN("")
 
 	// use a fake key to test the err
