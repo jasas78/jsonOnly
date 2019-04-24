@@ -57,8 +57,11 @@ func main() {
 	__VfLen2 := len(__VfArr2)
 	_P("\n 838192 07 : get real Amount %d\n", __VfLen2)
 
-	exec.Command("sh", "-c", _VcmdRemove01)
-	exec.Command("sh", "-c", _VcmdMkdir01)
+	__Vcmd02 := exec.Command("sh", "-c", _VcmdRemove01)
+	__Vcmd02.CombinedOutput()
+
+	__Vcmd03 := exec.Command("sh", "-c", _VcmdMkdir01)
+	__Vcmd03.CombinedOutput()
 
 	_Fjpg_gen__index(&__VfArr2)
 
@@ -79,8 +82,11 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 		__Vk3 := (__Vj4 - __Vj3) / 10
 		__Vk4 := __Vj3
 
-		__Vstr2 := _S("%d , %d , %d , %d : %d %d %d\n", __Vj2, __Vj3, __Vj4, __Vj5, __Vk2, __Vk3, __Vk4)
-		_P("%d : %s\n ", __Vj2, __Vstr2)
+		__Vstr2 := _S("%d , %d , %d , %d : %d %d %d", __Vj2, __Vj3, __Vj4, __Vj5, __Vk2, __Vk3, __Vk4)
+		__Vstr3 := _S("1/CCC_%d00_%d99", __Vk2, __Vk2)
+		__Vstr4 := _S("%d0_%d9", __Vk3, __Vk3)
+
+		_P("%d : %s : %s %s \n", __Vj2, __Vstr2, __Vstr3, __Vstr4)
 
 	}
 }
