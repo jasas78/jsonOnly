@@ -74,7 +74,10 @@ func main() {
 	__Vcmd03 := exec.Command("sh", "-c", _VcmdMkdir01)
 	__Vcmd03.CombinedOutput()
 
-	_Ffprintf("1/_index.md", _S(_Vpg01, "all_jpg", ""))
+	//_Ffprintf("1/_index.md", _S(_Vpg01, "all_jpg", ""))
+	//_Ffprintf(_S(__Vstr5+"/CCD_%05d.md", __Vj2),
+	//_S(_Vpg02, __Vstr6, "", __Uri01, __Vbasename1))
+	_Ffprintf("1/_index.md", _S(_Vpg02, "all_jpg", "", __Uri01, __VfArr2[0]))
 
 	_Fjpg_gen__index(&__VfArr2)
 
