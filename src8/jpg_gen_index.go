@@ -149,6 +149,7 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 			_FfprintfOverwrite(__Vso1, _S(_Vpg01, __Vstr8, ""))
 
 			_FfprintfAppend(__Vso3, _S(_Vpg03, __Vj2, __Vstr1, __Vstr4))
+			_FfprintfAppend(__Vso2, _S(_Vpg03, __Vj2, __Vstr1, __Vstr4))
 			//__Vso3 += _S("\n* [001]({{%relref "ccc_000_099/00_09/_index.md" %}})\n" )// write to 1/_index.md
 			//__Vso2 += _S("\n* [001]({{%relref "ccc_000_099/00_09/_index.md" %}})\n" )// write to 1/ccc_000_099/_index.md
 		}
@@ -156,12 +157,14 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 		_FfprintfOverwrite(_S(__Vstr5+"/ccd_%05d.md", __Vj2),
 			_S(_Vpg02, __Vstr6, "", __Uri01, __Vbasename1))
 
+		_FfprintfAppend(__Vso1, _S(_Vpg04, __Vj2, __Vstr1, __Vstr4, __Vj2))
 	}
 }
 
 var _Vpg01 string = "+++\ntitle = \"%s\"\ndescription = \"\"\nweight = 20\n+++\n%s\n"
 var _Vpg02 string = _Vpg01 + "<img class=\"center-fit-jpg\" src=\"%s/%s\" ></img>\n\n"
-var _Vpg03 string = "* [%d]({{%%relref \"%s/%s/_index.md\" %%}})\n\n"
+var _Vpg03 string = "* jump to 跳转到 [%d]({{%%relref \"%s/%s/_index.md\" %%}})\n\n"
+var _Vpg04 string = "* jump to 跳转到 [%d]({{%%relref \"%s/%s/ccd_%05d.md\" %%}})\n\n"
 
 func _FfprintfOverwrite(___Vfname string, ___VoutStr string) {
 	__Vf, __Verr := os.OpenFile(___Vfname, os.O_RDWR|os.O_CREATE, 0755)
