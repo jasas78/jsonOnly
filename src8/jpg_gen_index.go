@@ -35,11 +35,24 @@ func main() {
 	}
 
 	// func MustCompile(str string) *Regexp
-	__Vrep := regexp.MustCompile("\r\n|\r|\n")
+	__Vrep := regexp.MustCompile("\r\n|\r|\n| ")
 	//func (re *Regexp) Split(s string, n int) []string
-	__VfArr := __Vrep.Split(string(__VstdoutStderr), -1)
+	__VfArr1 := __Vrep.Split(string(__VstdoutStderr), -1)
 
-	__VfLen := len(__VfArr)
-	_P(" 838192 05 : get filename Amount : <%d> \n", __VfLen)
+	__VfLen1 := len(__VfArr1)
+	_P(" 838192 05 : get filename Amount : <%d> \n", __VfLen1)
+
+	__VfArr2 := []string{}
+	for __Vi1 := 0; __Vi1 < __VfLen1; __Vi1++ {
+		//_P(" %d:[%s] ", __Vi1+1, __VfArr1[__Vi1])
+		if 0 != len(__VfArr1[__Vi1]) {
+			__VfArr2 = append(__VfArr2, __VfArr1[__Vi1])
+		}
+	}
+
+	//_P(" 838192 06 : why len : <%d> : %x \n", len(__VfArr1[__VfLen1-1]), __VfArr1[__VfLen1-1])
+
+	__VfLen2 := len(__VfArr2)
+	_P("\n 838192 07 : get real Amount %d\n", __VfLen2)
 
 }
