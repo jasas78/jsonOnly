@@ -124,7 +124,8 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 			__Vstr8 = __Vstr5
 		}
 
-		_P("%d : %s : %s %s : %s , %s : %s\n", __Vj2, __Vstr2, __Vstr3, __Vstr4, __Vstr7, __Vstr8, __Vstr6)
+		_P("vj2:%d : str2:%s : str3:%s str4:%s str5:%s : str7:%s , str8:%s : str6:%s\n",
+			__Vj2, __Vstr2, __Vstr3, __Vstr4, __Vstr5, __Vstr7, __Vstr8, __Vstr6)
 
 		if __Vmkdir1 { // __Vstr3
 			__Vcmd21 := exec.Command("sh", "-c", "mkdir -p "+__Vstr7)
@@ -135,10 +136,10 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 		if __Vmkdir2 { // __Vstr5
 			__Vcmd21 := exec.Command("sh", "-c", "mkdir -p "+__Vstr8)
 			__Vcmd21.CombinedOutput()
-			_Ffprintf(__Vstr8+"/_index.md", _S(_Vpg01, __Vstr7, ""))
+			_Ffprintf(__Vstr8+"/_index.md", _S(_Vpg01, __Vstr8, ""))
 		}
 
-		_Ffprintf(_S(__Vstr5+"/CCD_%d.md", __Vj2),
+		_Ffprintf(_S(__Vstr5+"/CCD_%05d.md", __Vj2),
 			_S(_Vpg02, __Vstr6, "", __Uri01, __Vbasename1))
 
 	}
