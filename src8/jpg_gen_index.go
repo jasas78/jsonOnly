@@ -11,7 +11,7 @@ var (
 	_P            func(___Vfmt string, ___Vpara ...interface{}) (int, error) = fmt.Printf
 	_S            func(___Vfmt string, ___Vpara ...interface{}) string       = fmt.Sprintf
 	_Fpf          func(___Vfmt string, ___Vpara ...interface{}) string       = fmt.Sprintf
-	_VcmdRemove01 string                                                     = "rm -fr 1/CCC_*"
+	_VcmdRemove01 string                                                     = "rm -fr 1/ccc_* 1/_index.md"
 	_VcmdMkdir01  string                                                     = "mkdir -p 1/"
 	__Dir01       string
 	__Uri01       string
@@ -74,20 +74,24 @@ func main() {
 	__Vcmd03 := exec.Command("sh", "-c", _VcmdMkdir01)
 	__Vcmd03.CombinedOutput()
 
-	//_Ffprintf("1/_index.md", _S(_Vpg01, "all_jpg", ""))
-	//_Ffprintf(_S(__Vstr5+"/CCD_%05d.md", __Vj2),
-	//_S(_Vpg02, __Vstr6, "", __Uri01, __Vbasename1))
-	_Ffprintf("1/_index.md", _S(_Vpg02, "all_jpg", "", __Uri01, __VfArr2[0]))
-
 	_Fjpg_gen__index(&__VfArr2)
 
 	_P("\n\n")
 }
 
 func _Fjpg_gen__index(___VfArr *[]string) {
+	var (
+		__Vso3 = "1/_index.md" // write to 1/_index.md
+		__Vso2 = ""            // write to 1/ccc_000_099/_index.md
+		__Vso1 = ""            // write to 1/ccc_000_099/00_09/_index.md
+	)
+
+	_FfprintfOverwrite(__Vso3, _S(_Vpg01, "all_jpg", ""))
+	//_FfprintfOverwrite(_S(__Vstr5+"/ccd_%05d.md", __Vj2),
+	//_S(_Vpg02, __Vstr6, "", __Uri01, __Vbasename1))
+	//_FfprintfOverwrite("1/_index.md", _S(_Vpg02, "all_jpg", "", __Uri01, __VfArr2[0]))
+
 	for __Vidx1, __Vbasename1 := range *___VfArr {
-		//for __Vidx1, _ := range *___VfArr {
-		//_P(" %s", __Vstr1)
 		__Vj2 := __Vidx1 + 1
 
 		__Vj3 := __Vj2 % 10
@@ -99,7 +103,8 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 		__Vk4 := __Vj3
 
 		__Vstr2 := _S("%d , %d , %d , %d : %d %d %d", __Vj2, __Vj3, __Vj4, __Vj5, __Vk2, __Vk3, __Vk4)
-		__Vstr3 := _S("1/CCC_%d00_%d99", __Vk2, __Vk2)
+		__Vstr1 := _S("ccc_%d00_%d99", __Vk2, __Vk2)
+		__Vstr3 := "1/" + __Vstr1
 		__Vstr4 := _S("%d0_%d9", __Vk3, __Vk3)
 		__Vstr5 := _S("%s/%s", __Vstr3, __Vstr4)
 		__Vstr6 := _S("%s/%03d", __Vstr5, __Vj2)
@@ -127,22 +132,28 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 			__Vstr8 = __Vstr5
 		}
 
-		_P("vj2:%d : str2:%s : str3:%s str4:%s str5:%s : str7:%s , str8:%s : str6:%s\n",
-			__Vj2, __Vstr2, __Vstr3, __Vstr4, __Vstr5, __Vstr7, __Vstr8, __Vstr6)
+		_P("vj2:%d : str2:%s : str1:%s str3:%s str4:%s str5:%s : str7:%s , str8:%s : str6:%s\n",
+			__Vj2, __Vstr2, __Vstr1, __Vstr3, __Vstr4, __Vstr5, __Vstr7, __Vstr8, __Vstr6)
 
 		if __Vmkdir1 { // __Vstr3
 			__Vcmd21 := exec.Command("sh", "-c", "mkdir -p "+__Vstr7)
 			__Vcmd21.CombinedOutput()
-			_Ffprintf(__Vstr7+"/_index.md", _S(_Vpg01, __Vstr7, ""))
+			__Vso2 = __Vstr7 + "/_index.md"
+			_FfprintfOverwrite(__Vso2, _S(_Vpg01, __Vstr7, ""))
 		}
 
 		if __Vmkdir2 { // __Vstr5
 			__Vcmd21 := exec.Command("sh", "-c", "mkdir -p "+__Vstr8)
 			__Vcmd21.CombinedOutput()
-			_Ffprintf(__Vstr8+"/_index.md", _S(_Vpg01, __Vstr8, ""))
+			__Vso1 = __Vstr8 + "/_index.md"
+			_FfprintfOverwrite(__Vso1, _S(_Vpg01, __Vstr8, ""))
+
+			_FfprintfAppend(__Vso3, _S(_Vpg03, __Vj2, __Vstr1, __Vstr4))
+			//__Vso3 += _S("\n* [001]({{%relref "ccc_000_099/00_09/_index.md" %}})\n" )// write to 1/_index.md
+			//__Vso2 += _S("\n* [001]({{%relref "ccc_000_099/00_09/_index.md" %}})\n" )// write to 1/ccc_000_099/_index.md
 		}
 
-		_Ffprintf(_S(__Vstr5+"/CCD_%05d.md", __Vj2),
+		_FfprintfOverwrite(_S(__Vstr5+"/ccd_%05d.md", __Vj2),
 			_S(_Vpg02, __Vstr6, "", __Uri01, __Vbasename1))
 
 	}
@@ -150,8 +161,9 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 
 var _Vpg01 string = "+++\ntitle = \"%s\"\ndescription = \"\"\nweight = 20\n+++\n%s\n"
 var _Vpg02 string = _Vpg01 + "<img class=\"center-fit-jpg\" src=\"%s/%s\" ></img>\n\n"
+var _Vpg03 string = "* [%d]({{%%relref \"%s/%s/_index.md\" %%}})\n\n"
 
-func _Ffprintf(___Vfname string, ___VoutStr string) {
+func _FfprintfOverwrite(___Vfname string, ___VoutStr string) {
 	__Vf, __Verr := os.OpenFile(___Vfname, os.O_RDWR|os.O_CREATE, 0755)
 	if __Verr != nil {
 		_P(" 838191 01 : error <%v>\n\n", __Verr)
@@ -167,6 +179,25 @@ func _Ffprintf(___Vfname string, ___VoutStr string) {
 
 	if __Verr := __Vf.Close(); __Verr != nil {
 		_P(" 838191 05 : error <%v>\n\n", __Verr)
+		os.Exit(7)
+	}
+}
+func _FfprintfAppend(___Vfname string, ___VoutStr string) {
+	__Vf, __Verr := os.OpenFile(___Vfname, os.O_RDWR|os.O_APPEND, 0755)
+	if __Verr != nil {
+		_P(" 838191 07 : error <%v>\n\n", __Verr)
+		os.Exit(5)
+	}
+
+	// func (f *File) WriteString(s string) (n int, err error)
+	_, __Verr = __Vf.WriteString(___VoutStr)
+	if __Verr != nil {
+		_P(" 838191 08 : error <%v>\n\n", __Verr)
+		os.Exit(6)
+	}
+
+	if __Verr := __Vf.Close(); __Verr != nil {
+		_P(" 838191 09 : error <%v>\n\n", __Verr)
 		os.Exit(7)
 	}
 }
