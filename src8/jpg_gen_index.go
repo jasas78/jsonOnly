@@ -85,8 +85,32 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 		__Vstr2 := _S("%d , %d , %d , %d : %d %d %d", __Vj2, __Vj3, __Vj4, __Vj5, __Vk2, __Vk3, __Vk4)
 		__Vstr3 := _S("1/CCC_%d00_%d99", __Vk2, __Vk2)
 		__Vstr4 := _S("%d0_%d9", __Vk3, __Vk3)
+		__Vstr5 := _S("%s/%s", __Vstr3, __Vstr4)
 
-		_P("%d : %s : %s %s \n", __Vj2, __Vstr2, __Vstr3, __Vstr4)
+		__Vmkdir1 := false
+		__Vmkdir2 := false
+		if __Vj2 == 1 {
+			__Vmkdir1 = true
+			__Vmkdir2 = true
+		} else {
+			if 0 == __Vk4 {
+				if 0 == __Vk3 {
+					__Vmkdir1 = true // __Vstr3
+				}
+				__Vmkdir2 = true // __Vstr5
+			}
+		}
+
+		__Vstr7 := ""
+		__Vstr8 := ""
+		if __Vmkdir1 { // __Vstr3
+			__Vstr7 = __Vstr3
+		}
+		if __Vmkdir2 { // __Vstr3
+			__Vstr8 = __Vstr5
+		}
+
+		_P("%d : %s : %s %s : %s %s \n", __Vj2, __Vstr2, __Vstr3, __Vstr4, __Vstr7, __Vstr8)
 
 	}
 }
