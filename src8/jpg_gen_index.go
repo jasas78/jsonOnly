@@ -8,8 +8,10 @@ import (
 )
 
 var (
-	_P func(___Vfmt string, ___Vpara ...interface{}) (int, error) = fmt.Printf
-	_S func(___Vfmt string, ___Vpara ...interface{}) string       = fmt.Sprintf
+	_P            func(___Vfmt string, ___Vpara ...interface{}) (int, error) = fmt.Printf
+	_S            func(___Vfmt string, ___Vpara ...interface{}) string       = fmt.Sprintf
+	_VcmdRemove01 string                                                     = "rm -fr 1/CCC_*"
+	_VcmdMkdir01  string                                                     = "mkdir -p 1/"
 )
 
 func _Usage() {
@@ -55,4 +57,16 @@ func main() {
 	__VfLen2 := len(__VfArr2)
 	_P("\n 838192 07 : get real Amount %d\n", __VfLen2)
 
+	exec.Command("sh", "-c", _VcmdRemove01)
+	exec.Command("sh", "-c", _VcmdMkdir01)
+
+	_Fjpg_gen__index(&__VfArr2)
+
+	_P("\n\n")
+}
+
+func _Fjpg_gen__index(___VfArr *[]string) {
+	for _, __Vstr1 := range *___VfArr {
+		_P(" %s", __Vstr1)
+	}
 }
