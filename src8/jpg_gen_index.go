@@ -66,7 +66,21 @@ func main() {
 }
 
 func _Fjpg_gen__index(___VfArr *[]string) {
-	for _, __Vstr1 := range *___VfArr {
-		_P(" %s", __Vstr1)
+	//for __Vidx1, __Vstr1 := range *___VfArr {
+	for __Vidx1, _ := range *___VfArr {
+		//_P(" %s", __Vstr1)
+		__Vj2 := __Vidx1 + 1
+
+		__Vj3 := __Vj2 % 10
+		__Vj4 := __Vj2 % 100
+		__Vj5 := __Vj2 % 1000
+
+		__Vk2 := (__Vj5 - __Vj4) / 100
+		__Vk3 := (__Vj4 - __Vj3) / 10
+		__Vk4 := __Vj3
+
+		__Vstr2 := _S("%d , %d , %d , %d : %d %d %d\n", __Vj2, __Vj3, __Vj4, __Vj5, __Vk2, __Vk3, __Vk4)
+		_P("%d : %s\n ", __Vj2, __Vstr2)
+
 	}
 }
