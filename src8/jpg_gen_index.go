@@ -86,7 +86,7 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 		__Vso1 = ""            // write to 1/ccc_000_099/00_09/_index.md
 	)
 
-	_FfprintfOverwrite(__Vso3, _S(_Vpg01, "all_jpg", ""))
+	_FfprintfOverwrite(__Vso3, _S(_Vpg01, " 图片版，防止 防火墙 关键字 过滤， 墙内直接可看 ", ""))
 
 	for __Vidx1, __Vbasename1 := range *___VfArr {
 		__Vj2 := __Vidx1 + 1
