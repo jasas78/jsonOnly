@@ -9,7 +9,7 @@ type _Tconfig struct {
 	//MyId128 []byte
 } //    _Tconfig
 type _Tself struct {
-	ProjName string
+	RoleName string
 } //    _Tself
 
 type _TuExtMRead struct {
