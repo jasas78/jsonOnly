@@ -97,13 +97,14 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 		__Vj6 := __Vj2 % 10000
 		__Vj7 := __Vj2 % 100000
 
-		__Vk2 := (__Vj5 - __Vj4) / 100
+		//__Vk2 := (__Vj5 - __Vj4) / 100
+		__Vk2 := (__Vj7 - __Vj4) / 100
 		__Vk3 := (__Vj4 - __Vj3) / 10
 		__Vk4 := __Vj3
 
-		__Vstr2 := _S("j2:%d , j3:%d , j4:%d , j5:%d , j6:%d , j7:%d : %d %d %d",
+		__Vstr2 := _S("j2:%d , j3:%d , j4:%d , j5:%d , j6:%d , j7:%d : k2:%d k3:%d k4:%d",
 			__Vj2, __Vj3, __Vj4, __Vj5, __Vj6, __Vj7, __Vk2, __Vk3, __Vk4)
-		__Vstr1 := _S("ccc_%d00_%d99", __Vk2, __Vk2)
+		__Vstr1 := _S("ccc_%03d00_%03d99", __Vk2, __Vk2)
 		__Vstr3 := "1/" + __Vstr1
 		__Vstr4 := _S("%d0_%d9", __Vk3, __Vk3)
 		__Vstr5 := _S("%s/%s", __Vstr3, __Vstr4)
