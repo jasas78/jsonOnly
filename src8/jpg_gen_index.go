@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"strings"
 )
 
 var (
@@ -155,9 +156,21 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 			//__Vso2 += _S("\n* [001]({{%relref "ccc_000_099/00_09/_index.md" %}})\n" )// write to 1/ccc_000_099/_index.md
 		}
 
-		_FfprintfOverwrite(_S(__Vstr5+"/ccd_%05d.md", __Vj2),
-			_S(_Vpg02, __Vstr6, "", __Uri01, __Vbasename1, __Vstr6))
-		//_S(_Vpg02, "", "", __Uri01, __Vbasename1, __Vstr6))
+		//_P("8388131 111 <%s>\n", __Vbasename1)
+		__Vlen4 := len(__Vbasename1)
+		//_P("8388131 112 (%d)[__Vbasename1:%s]<%d>\n", __Vlen4 , __Vbasename1, strings.Index(__Vbasename1, "mp4"))
+		__Vi_mp4 := strings.Index(__Vbasename1, ".mp4")
+		if __Vi_mp4 == (__Vlen4 - 4) {
+			_FfprintfOverwrite(_S(__Vstr5+"/ccd_%05d.md", __Vj2),
+				_S(_Vmp401, __Vstr6, "",
+					__Uri01, __Vbasename1,
+					__Uri01, __Vbasename1,
+					__Uri01, __Vbasename1,
+				))
+		} else {
+			_FfprintfOverwrite(_S(__Vstr5+"/ccd_%05d.md", __Vj2),
+				_S(_Vpg02, __Vstr6, "", __Uri01, __Vbasename1, __Vstr6))
+		}
 
 		_FfprintfAppend(__Vso1, _S(_Vpg04, __Vj2, __Vstr1, __Vstr4, __Vj2))
 	}
@@ -165,8 +178,33 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 
 var _Vpg01 string = "+++\ntitle = \"%s\"\ndescription = \"\"\nweight = 20\n+++\n%s\n"
 var _Vpg02 string = _Vpg01 +
-	"<table style=\"border:2px solid black;max-width:800px;max-height:800px;\" \n><tr><td>" +
-	"<img class=\"center-fit-jpg\"\nsrc=\"%s/%s\"  >%s</img></td></tr></table>"
+	"<table style=\"border:2px solid black;max-width:800px;max-height:800px;\" \n><tr><td>\n" +
+	"<img class=\"center-fit-jpg\"\n" +
+	"src=\"%s/%s\">\n" +
+	"%s\n" +
+	"</img></td></tr></table>\n"
+var _Vmp401 string = _Vpg01 +
+	"<table style=\"border:2px solid black;max-width:800px;max-height:800px;\"\n" +
+	"><tr><td>" +
+	"<video preload=\"none\" width=\"98%%\"\n" +
+	"poster=\"%s/%s\"\n" +
+	"controls>" +
+	"<source src=\"%s/%s\"\n" +
+	"type=\"video/mp4\">%s/%s\n" +
+	"</video>\n" +
+	"</td></tr></table>\n"
+
+/*
+<table style="border:2px solid black;max-width:800px;max-height:800px;"
+><tr><td>
+<video preload="none" width="98%"
+poster="/jpg_/20190430_NxaOmWaI8sI.mp4.jpg"
+controls>
+<source src="/jpg_/20190430_NxaOmWaI8sI.mp4"
+type="video/mp4">/jpg_/20190430_NxaOmWaI8sI.mp4
+</video>
+</td></tr></table>
+*/
 
 //"<img style=\"max-width:800px;max-height:800px;\" class=\"center-fit-jpg\" src=\"%s/%s\" >%s</img>\n\n"
 var _Vpg03 string = "* jump to 跳转到 [%d]({{%%relref \"%s/%s/ccd_%05d.md\" %%}})\n\n"
