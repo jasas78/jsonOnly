@@ -16,25 +16,24 @@
 package main
 
 import (
-    "log"
-    "net"
-    "fmt"
-    "net/http"
+	"fmt"
+	"log"
+	"net"
+	"net/http"
 )
 
 func main() {
-    sm := http.NewServeMux()
-    sm.HandleFunc("/", HelloServer)
+	sm := http.NewServeMux()
+	sm.HandleFunc("/", HelloServer)
 
-    //l, err := net.Listen("tcp4", ":38080")
-    l, err := net.Listen("tcp4", ":80")
+	//l, err := net.Listen("tcp4", ":38080")
+	l, err := net.Listen("tcp4", ":80")
 
-    if err != nil {
-        log.Fatal(err)
-    }
-    log.Fatal(http.Serve(l, sm))
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Fatal(http.Serve(l, sm))
 }
-
 
 func HelloServer(w http.ResponseWriter, r *http.Request) {
 	/*
