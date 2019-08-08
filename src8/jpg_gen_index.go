@@ -80,6 +80,8 @@ func main() {
 	_P("\n\n")
 }
 
+var _VmyAD01 string = ""
+
 func _Fjpg_gen__index(___VfArr *[]string) {
 	var (
 		__Vso3 = "1/_index.md" // write to 1/_index.md
@@ -87,7 +89,8 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 		__Vso1 = ""            // write to 1/ccc_000_099/00_09/_index.md
 	)
 
-	_FfprintfOverwrite(__Vso3, _S(_Vpg01, " 图片版，防止 防火墙 关键字 过滤， 墙内直接可看 ", ""))
+	//_FfprintfOverwrite(__Vso3, _S(_Vpg01, " 图片版，防止 防火墙 关键字 过滤， 墙内直接可看 ", ""))
+	_FfprintfOverwrite(__Vso3, _S(_Vpg01, " 图片版，防止 防火墙 关键字 过滤， 墙内直接可看 ", _VmyAD01))
 
 	for __Vidx1, __Vbasename1 := range *___VfArr {
 		__Vj2 := __Vidx1 + 1
@@ -141,14 +144,14 @@ func _Fjpg_gen__index(___VfArr *[]string) {
 			__Vcmd21 := exec.Command("sh", "-c", "mkdir -p "+__Vstr7)
 			__Vcmd21.CombinedOutput()
 			__Vso2 = __Vstr7 + "/_index.md"
-			_FfprintfOverwrite(__Vso2, _S(_Vpg01, __Vstr7, ""))
+			_FfprintfOverwrite(__Vso2, _S(_Vpg01, __Vstr7, _VmyAD01))
 		}
 
 		if __Vmkdir2 { // __Vstr5
 			__Vcmd21 := exec.Command("sh", "-c", "mkdir -p "+__Vstr8)
 			__Vcmd21.CombinedOutput()
 			__Vso1 = __Vstr8 + "/_index.md"
-			_FfprintfOverwrite(__Vso1, _S(_Vpg01, __Vstr8, ""))
+			_FfprintfOverwrite(__Vso1, _S(_Vpg01, __Vstr8, _VmyAD01))
 
 			_FfprintfAppend(__Vso3, _S(_Vpg03, __Vj2, __Vstr1, __Vstr4, __Vj2))
 			_FfprintfAppend(__Vso2, _S(_Vpg03, __Vj2, __Vstr1, __Vstr4, __Vj2))
