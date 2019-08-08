@@ -1,15 +1,40 @@
+//package main
+//
+//import (
+//	"fmt"
+//	"net/http"
+//)
+//
+//func main() {
+//	http.HandleFunc("/", HelloServer)
+//    http.ServeType = "tcp4"
+//	//http.ListenAndServe("0.0.0.0:38080", nil)
+//	http.ListenAndServe("0.0.0.0:80", nil)
+//}
+
+// https://play.golang.org/p/EOZkK1UUpe
 package main
 
 import (
-	"fmt"
-	"net/http"
+    "log"
+    "net"
+    "fmt"
+    "net/http"
 )
 
 func main() {
-	http.HandleFunc("/", HelloServer)
-	http.ListenAndServe("0.0.0.0:38080", nil)
-	//http.ListenAndServe("0.0.0.0:80", nil)
+    sm := http.NewServeMux()
+    sm.HandleFunc("/", HelloServer)
+
+    //l, err := net.Listen("tcp4", ":38080")
+    l, err := net.Listen("tcp4", ":80")
+
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Fatal(http.Serve(l, sm))
 }
+
 
 func HelloServer(w http.ResponseWriter, r *http.Request) {
 	/*
