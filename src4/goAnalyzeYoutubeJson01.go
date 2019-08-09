@@ -1,11 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"bufio"
 	//"io"
 	//"log"
 	//"strings"
@@ -31,17 +31,26 @@ type _STrec struct {
 	format_id, ext, vcodec, acodec, url string
 }
 
+type _STdst struct {
+	vo1_ao2_both3 int
+	size          int
+	idx           int
+}
+
 var (
-	_jsonFile     *os.File
-	_filenameJson string = "1/1.json"
-	_jsonByte     []byte
-	_err          error
-	_vstYT00      map[string]interface{}
-	_vstYT10      []string = []string{"description", "id", "webpage_url", "thumbnail", "fulltitle", "format_id", "upload_date", "uploader"}
-	_recLen       int
-	_recArr       []_STrec
-	_s300         string = ""
-	_s400         string = ""
+	_jsonFile         *os.File
+	_filenameJson     string = "________________.json"
+	_jsonByte         []byte
+	_err              error
+	_vstYT00          map[string]interface{}
+	_vstYT10          []string = []string{"description", "id", "webpage_url", "thumbnail", "fulltitle", "format_id", "upload_date", "uploader"}
+	_recLen           int
+	_recArr           []_STrec
+	_s300             string = ""
+	_s400             string = ""
+	_vDstMaxAllowVo   _STdst
+	_vDstMaxAllowAo   _STdst
+	_vDstMaxAllowBoth _STdst
 )
 
 // func Unmarshal(data []byte, v interface{}) error
@@ -155,6 +164,10 @@ func _analyzeJsonObj() {
 			fmt.Printf("%s", _s300)
 		}
 
+		_vDstMaxAllowVo = _STdst{}
+		_vDstMaxAllowAo = _STdst{}
+		_vDstMaxAllowBoth = _STdst{}
+
 		for ___idx := 0; ___idx < _recLen; ___idx++ {
 			_s400 += fmt.Sprintf("#%d=", 40000+___idx)
 			_s400 += fmt.Sprintf(" %3s", _recArr[___idx].format_id)
@@ -164,6 +177,53 @@ func _analyzeJsonObj() {
 			_s400 += fmt.Sprintf(" %13s", _recArr[___idx].acodec)
 			_s400 += fmt.Sprintf(" %s", _recArr[___idx].url)
 			_s400 += fmt.Sprintf("\n")
+
+			__fSize := _recArr[___idx].filesize
+			if __fSize != 0 {
+				var __vSign = 0
+				if _recArr[___idx].vcodec == "" || _recArr[___idx].vcodec == "none" {
+					__vSign = 1
+				}
+				if _recArr[___idx].acodec == "" || _recArr[___idx].acodec == "none" {
+					__vSign += 2
+				}
+				switch __vSign {
+				case 0:
+					{ // both vo & ao
+						if __fSize < 50000000 && __fSize > _vDstMaxAllowBoth.size {
+							_vDstMaxAllowBoth.idx = ___idx
+							_vDstMaxAllowBoth.vo1_ao2_both3 = 3
+							_vDstMaxAllowBoth.size = __fSize
+						}
+					}
+				case 1:
+					{ // vo null , ao only
+						if __fSize < 45000000 && __fSize > _vDstMaxAllowAo.size {
+							_vDstMaxAllowAo.idx = ___idx
+							_vDstMaxAllowAo.vo1_ao2_both3 = 2
+							_vDstMaxAllowAo.size = __fSize
+						}
+					}
+				case 2:
+					{ // ao null , vo only
+						if __fSize < 35000000 && __fSize > _vDstMaxAllowVo.size {
+							_vDstMaxAllowVo.idx = ___idx
+							_vDstMaxAllowVo.vo1_ao2_both3 = 1
+							_vDstMaxAllowVo.size = __fSize
+						}
+					}
+				case 3:
+					{ // vo null , ao null , shit.
+						fmt.Printf(" 100053 : not-vo, not-ao , what is this ? \n")
+						os.Exit(143)
+					}
+				default:
+					{ // unknown
+						fmt.Printf(" 100059 : unknow what happpens.\n")
+						os.Exit(149)
+					}
+				}
+			}
 		}
 		if 40000 == 40000 {
 			fmt.Printf("%s", _s400)
@@ -174,26 +234,42 @@ func _analyzeJsonObj() {
 // func fmt.Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error)
 // func os.Create(name string) (*File, error)
 // func bufio.NewWriter(w io.Writer) *Writer
-func    _genYoutubeDownloadScript(){
-    __vFshName := os.Args[1] + ".sh"
-    __vFileSh , __vErr := os.Create( __vFshName )
+func _genYoutubeDownloadScript() {
+	__vFshName := os.Args[1] + ".sh"
+	__vFileSh, __vErr := os.Create(__vFshName)
 	if __vErr != nil {
 		fmt.Printf("Create <%s> failed\n", __vFshName)
 		fmt.Println(__vErr)
 		os.Exit(140)
-    }
+	}
 	defer __vFileSh.Close()
 
-    __vBfIoWriter := bufio.NewWriter(__vFileSh)
-    fmt.Fprintf( __vBfIoWriter , "#!/bin/bash\n\n")
+	__vBfIoWriter := bufio.NewWriter(__vFileSh)
+	fmt.Fprintf(__vBfIoWriter, "#!/bin/bash\n\n")
 
-    fmt.Fprintf(__vBfIoWriter , "%s\n", _s400)
+	fmt.Fprintf(__vBfIoWriter, "%s\n", _s400)
 
-    fmt.Fprintf(__vBfIoWriter , "wget -c -O %s.jpg\n\n", os.Args[1] )
+	fmt.Fprintf(__vBfIoWriter, "wget -c -O %s.jpg\n\n", os.Args[1])
 
-    //fmt.Fprintf(__vBfIoWriter , "wget -c -O %s.jpg\n\n", os.Args[1] )
+	//fmt.Fprintf(__vBfIoWriter , "wget -c -O %s.jpg\n\n", os.Args[1] )
 
-    __vBfIoWriter .Flush()
+	fmt.Fprintf(__vBfIoWriter, "# Name : idx size   vo1_ao2_both3 \n")
+	fmt.Fprintf(__vBfIoWriter, "# Ao   : %3d %9d %1d \n",
+		_vDstMaxAllowAo.idx,
+		_vDstMaxAllowAo.size,
+		_vDstMaxAllowAo.vo1_ao2_both3)
+
+	fmt.Fprintf(__vBfIoWriter, "# Vo   : %3d %9d %1d \n",
+		_vDstMaxAllowVo.idx,
+		_vDstMaxAllowVo.size,
+		_vDstMaxAllowVo.vo1_ao2_both3)
+
+	fmt.Fprintf(__vBfIoWriter, "# Both : %3d %9d %1d \n",
+		_vDstMaxAllowBoth.idx,
+		_vDstMaxAllowBoth.size,
+		_vDstMaxAllowBoth.vo1_ao2_both3)
+
+	__vBfIoWriter.Flush()
 }
 
 func main() {
@@ -208,10 +284,11 @@ func main() {
 		fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>", len(os.Args), os.Args[0])
 		os.Exit(100)
 	}
+	_filenameJson     = os.Args[1]
 
 	_readJsonFile()
 
 	_analyzeJsonObj()
 
-    _genYoutubeDownloadScript()
+	_genYoutubeDownloadScript()
 }
