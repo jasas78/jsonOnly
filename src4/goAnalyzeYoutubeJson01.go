@@ -276,19 +276,19 @@ func _FgenWavMp3Line(___w *bufio.Writer, ___src string) {
 }
 
 //func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
-func _FgetDownloadLine(___w *bufio.Writer, ___dst string , ___vRec _STrec){
-    __protocol := ___vRec.protocol
-    __src1 := ___vRec.url
-    __src2 := _vstYT00["webpage_url"]
-    __fmt := ___vRec.format_id
+func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
+	__protocol := ___vRec.protocol
+	__src1 := ___vRec.url
+	__src2 := _vstYT00["webpage_url"]
+	__fmt := ___vRec.format_id
 	switch __protocol {
 	case "https":
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
 			fmt.Fprintf(___w, "echo wget -c \\\n    -O %s  \\\n    '%s'\n", ___dst, __src1)
-			fmt.Fprintf(___w, "youtube-dl \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n", 
-            __fmt,
-            ___dst, __src2)
+			fmt.Fprintf(___w, "youtube-dl \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n",
+				__fmt,
+				___dst, __src2)
 		}
 	case "m3u8_native":
 		{
@@ -349,41 +349,49 @@ func _genYoutubeDownloadScript() {
 		_vDstMaxAllowBoth.ext,
 		_recArr[_vDstMaxAllowBoth.idx].protocol)
 
-	if _vDstMaxAllowBoth.vo1_ao2_both3 == 0 {
-		if _vDstMaxAllowAo.vo1_ao2_both3 != 0 &&
-			_vDstMaxAllowVo.vo1_ao2_both3 != 0 {
-			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _vDstMaxAllowVo.ext)
-			__ff2 := fmt.Sprintf("%s.ao.%s", _filenameJson, _vDstMaxAllowAo.ext)
-            fmt.Fprintf(__vBfIoWriter, "# combine183838 01 : no-both, so , use vo + ao : %s + %s \n", __ff1, __ff2)
-			_FgetDownloadLine(__vBfIoWriter, __ff1, _recArr[_vDstMaxAllowVo.idx])
-			_FgetDownloadLine(__vBfIoWriter, __ff2, _recArr[_vDstMaxAllowAo.idx])
+	__ffVO := fmt.Sprintf("%s.vo.%s", _filenameJson, _vDstMaxAllowVo.ext)
+	__ffAO := fmt.Sprintf("%s.ao.%s", _filenameJson, _vDstMaxAllowAo.ext)
+	__ffBO := fmt.Sprintf("%s.bo.%s", _filenameJson, _vDstMaxAllowBoth.ext)
 
-			fmt.Fprintf(__vBfIoWriter, "\n" )
-			_FgenWavMp3Line(__vBfIoWriter, __ff2)
-			_FgenVoAoLine(__vBfIoWriter, __ff1, _filenameJson+".wav")
-		} else {
-			fmt.Printf("\n\n  no-both , AND no(ao + vo) , what happens ? 1838111. \n\n")
-			os.Exit(180)
+	if _vDstMaxAllowAo.vo1_ao2_both3 != 0 &&
+		_vDstMaxAllowVo.vo1_ao2_both3 != 0 {
+		fmt.Fprintf(__vBfIoWriter, "# combine183838 01 : ideal : use vo + ao : %s + %s \n", __ffVO, __ffAO)
+		_FgetDownloadLine(__vBfIoWriter, __ffVO, _recArr[_vDstMaxAllowVo.idx])
+		_FgetDownloadLine(__vBfIoWriter, __ffAO, _recArr[_vDstMaxAllowAo.idx])
+
+		fmt.Fprintf(__vBfIoWriter, "\n")
+		_FgenWavMp3Line(__vBfIoWriter, __ffAO)
+		_FgenVoAoLine(__vBfIoWriter, __ffVO, _filenameJson+".wav")
+	} else { // no-Vo or/and no-Ao
+		if _vDstMaxAllowBoth.vo1_ao2_both3 == 0 { // no-both + ( no-Vo or no-Ao)
+			fmt.Printf("\n\n# no-both , AND (no-Ao || no-Vo), what happens ? 1838111. 181 \n\n")
+			os.Exit(181)
 		}
-	} else { // both exist.
-		if _vDstMaxAllowVo.vo1_ao2_both3 != 0 { // use vo && both
-			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _vDstMaxAllowVo.ext)
-			__ff2 := fmt.Sprintf("%s.bo.%s", _filenameJson, _vDstMaxAllowBoth.ext)
-            fmt.Fprintf(__vBfIoWriter, "# combine183838 11 : both exist, vo exist , use vo + both : %s + %s \n", __ff1, __ff2)
-			_FgetDownloadLine(__vBfIoWriter, __ff1, _recArr[_vDstMaxAllowVo.idx])
-			_FgetDownloadLine(__vBfIoWriter, __ff2, _recArr[_vDstMaxAllowBoth.idx])
+		if _vDstMaxAllowVo.vo1_ao2_both3 != 0 { // use vo && both(as ao)
+			fmt.Fprintf(__vBfIoWriter, "# combine183838 11 : use vo + both(ao) : %s + %s \n", __ffVO, __ffBO)
+			_FgetDownloadLine(__vBfIoWriter, __ffVO, _recArr[_vDstMaxAllowVo.idx])
+			_FgetDownloadLine(__vBfIoWriter, __ffBO, _recArr[_vDstMaxAllowBoth.idx])
 
-			fmt.Fprintf(__vBfIoWriter, "\n" )
-			_FgenWavMp3Line(__vBfIoWriter, __ff2)
-			_FgenVoAoLine(__vBfIoWriter, __ff1, _filenameJson+".wav")
-		} else { // use both only
-			__ff1 := fmt.Sprintf("%s.bo.%s", _filenameJson, _vDstMaxAllowBoth.ext)
-            fmt.Fprintf(__vBfIoWriter, "# combine183838 21 : no vo , but both only, so , use both only : %s \n", __ff1)
-			_FgetDownloadLine(__vBfIoWriter, __ff1, _recArr[_vDstMaxAllowBoth.idx])
+			fmt.Fprintf(__vBfIoWriter, "\n")
+			_FgenWavMp3Line(__vBfIoWriter, __ffBO)
+			_FgenVoAoLine(__vBfIoWriter, __ffVO, _filenameJson+".wav")
+		} else {
+			if _vDstMaxAllowAo.vo1_ao2_both3 != 0 { // use both(as vo) + ao
+				fmt.Fprintf(__vBfIoWriter, "# combine183838 21 : use both(vo) + ao : %s + %s \n", __ffBO, __ffAO)
+				_FgetDownloadLine(__vBfIoWriter, __ffBO, _recArr[_vDstMaxAllowBoth.idx])
+				_FgetDownloadLine(__vBfIoWriter, __ffAO, _recArr[_vDstMaxAllowAo.idx])
 
-			fmt.Fprintf(__vBfIoWriter, "\n" )
-			_FgenWavMp3Line(__vBfIoWriter, __ff1)
-			_FgenVoAoLine(__vBfIoWriter, __ff1, _filenameJson+".wav")
+				fmt.Fprintf(__vBfIoWriter, "\n")
+				_FgenWavMp3Line(__vBfIoWriter, __ffAO)
+				_FgenVoAoLine(__vBfIoWriter, __ffBO, _filenameJson+".wav")
+			} else { // use both only
+				fmt.Fprintf(__vBfIoWriter, "# combine183838 31 : no vo , but both only, so , use both only : %s \n", __ffBO)
+				_FgetDownloadLine(__vBfIoWriter, __ffBO, _recArr[_vDstMaxAllowBoth.idx])
+
+				fmt.Fprintf(__vBfIoWriter, "\n")
+				_FgenWavMp3Line(__vBfIoWriter, __ffBO)
+				_FgenVoAoLine(__vBfIoWriter, __ffBO, _filenameJson+".wav")
+			}
 		}
 	}
 
