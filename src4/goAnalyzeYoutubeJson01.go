@@ -50,6 +50,7 @@ var (
 	_vstYT10          []string = []string{"description", "id", "webpage_url", "thumbnail", "fulltitle", "format_id", "upload_date", "uploader", "protocol"}
 	_recLen           int
 	_recArr           []_STrec
+	_s200             string = ""
 	_s300             string = ""
 	_s400             string = ""
 	_vDstMaxAllowVo   _STdst
@@ -100,11 +101,12 @@ func _analyzeJsonObj() {
 		os.Exit(121)
 	}
 
+	//fmt.Printf(" JSON description 00 <%v> \n" , _vstYT00["description"] )
+	for ___idx, ___key := range _vstYT10 {
+		_s200 += fmt.Sprintf("#%d= %s:=<%v> \n", 10000+___idx, ___key, _vstYT00[___key])
+	}
 	if 123 == 123 {
-		//fmt.Printf(" JSON description 00 <%v> \n" , _vstYT00["description"] )
-		for ___idx, ___key := range _vstYT10 {
-			fmt.Printf("%d= %s:=<%v> \n", 10000+___idx, ___key, _vstYT00[___key])
-		}
+		fmt.Printf("%s", _s200)
 	}
 
 	var _formatsNode interface{} = _vstYT00["formats"]
@@ -118,7 +120,7 @@ func _analyzeJsonObj() {
 		_recArr = make([]_STrec, _recLen)
 
 		for ___idx, ___fNode := range _formatArrs {
-			_s300 += fmt.Sprintf("%d= ", 30000+___idx)
+			_s300 += fmt.Sprintf("#%d= ", 30000+___idx)
 			___fMap := ___fNode.(map[string]interface{})
 			_recArr[___idx] = _STrec{}
 			for ___key, ___value := range ___fMap {
@@ -254,7 +256,10 @@ func _analyzeJsonObj() {
 func _FgenVoAoLine(___w *bufio.Writer, ___srcVo, ___srcAo string) {
 	__vFnameMp4 := _filenameJson + ".mp4"
 	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMp4)
-	fmt.Fprintf(___w, "/usr/bin/ffmpeg -i %s  -i %s        -ac 1 -ab 25000   -map 0:v:0 -map 1:a:0      %s \n", ___srcVo, ___srcAo, __vFnameMp4)
+	fmt.Fprintf(___w,
+		"/usr/bin/ffmpeg \\\n    -i %s  \\\n    -i %s        "+
+			"\\\n    -ac 1 -ab 25000   -map 0:v:0 -map 1:a:0      \\\n    %s \n",
+		___srcVo, ___srcAo, __vFnameMp4)
 	// https://superuser.com/questions/1137612/ffmpeg-replace-audio-in-video
 }
 
@@ -262,9 +267,12 @@ func _FgenWavMp3Line(___w *bufio.Writer, ___src string) {
 	__vFnameWav := _filenameJson + ".wav"
 	__vFnameMp3 := _filenameJson + ".mp3"
 	fmt.Fprintf(___w, "rm -f %s \n", __vFnameWav)
-	fmt.Fprintf(___w, "/usr/bin/ffmpeg -i %s         -vn -ac 1 -ab 25000        %s \n", ___src, __vFnameWav)
+	fmt.Fprintf(___w,
+		"/usr/bin/ffmpeg \\\n    -i %s         \\\n    -vn -ac 1 -ab 25000        "+
+			"\\\n    %s \n",
+		___src, __vFnameWav)
 	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMp3)
-	fmt.Fprintf(___w, "lame       %s       %s\n", __vFnameWav, __vFnameMp3)
+	fmt.Fprintf(___w, "lame       \\\n    %s       \\\n    %s\n", __vFnameWav, __vFnameMp3)
 }
 
 func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
@@ -272,12 +280,12 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
 	case "https":
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
-			fmt.Fprintf(___w, "wget -c -O %s  '%s'\n", ___dst, ___src)
+			fmt.Fprintf(___w, "wget -c -O %s  \\\n    '%s'\n", ___dst, ___src)
 		}
 	case "m3u8_native":
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
-			fmt.Fprintf(___w, "/usr/bin/ffmpeg -i '%s' %s \n", ___src, ___dst)
+			fmt.Fprintf(___w, "/usr/bin/ffmpeg -i '%s' \\\n    %s \n", ___src, ___dst)
 		}
 	default:
 		{
@@ -306,7 +314,7 @@ func _genYoutubeDownloadScript() {
 
 	fmt.Fprintf(__vBfIoWriter, "%s\n", _s400)
 
-	fmt.Fprintf(__vBfIoWriter, "wget -c -O %s.jpg\n\n", os.Args[1])
+	fmt.Fprintf(__vBfIoWriter, "wget -c -O %s.jpg \\\n    '%s' \n\n", os.Args[1], _vstYT00["thumbnail"])
 
 	//fmt.Fprintf(__vBfIoWriter , "wget -c -O %s.jpg\n\n", os.Args[1] )
 
@@ -366,6 +374,16 @@ func _genYoutubeDownloadScript() {
 			_FgenWavMp3Line(__vBfIoWriter, __ff1)
 			_FgenVoAoLine(__vBfIoWriter, __ff1, _filenameJson+".wav")
 		}
+	}
+
+	if 20004 == 20004 {
+		fmt.Fprintf(__vBfIoWriter, "\n")
+		fmt.Fprintf(__vBfIoWriter, "%s", _s200)
+	}
+
+	if 30004 == 30005 {
+		fmt.Fprintf(__vBfIoWriter, "\n")
+		fmt.Fprintf(__vBfIoWriter, "%s", _s300)
 	}
 
 	fmt.Fprintf(__vBfIoWriter, "\n")
