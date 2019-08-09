@@ -251,6 +251,22 @@ func _analyzeJsonObj() {
 	}
 }
 
+func _FgenVoAoLine(___w *bufio.Writer, ___srcVo, ___srcAo string) {
+	__vFnameMp4 := _filenameJson + ".mp4"
+	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMp4)
+	fmt.Fprintf(___w, "/usr/bin/ffmpeg -i %s  -i %s        -ac 1 -ab 25000   -map 0:v:0 -map 1:a:0      %s \n", ___srcVo, ___srcAo, __vFnameMp4)
+	// https://superuser.com/questions/1137612/ffmpeg-replace-audio-in-video
+}
+
+func _FgenWavMp3Line(___w *bufio.Writer, ___src string) {
+	__vFnameWav := _filenameJson + ".wav"
+	__vFnameMp3 := _filenameJson + ".mp3"
+	fmt.Fprintf(___w, "rm -f %s \n", __vFnameWav)
+	fmt.Fprintf(___w, "/usr/bin/ffmpeg -i %s         -vn -ac 1 -ab 25000        %s \n", ___src, __vFnameWav)
+	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMp3)
+	fmt.Fprintf(___w, "lame       %s       %s\n", __vFnameWav, __vFnameMp3)
+}
+
 func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
 	switch ___protocol {
 	case "https":
@@ -325,6 +341,9 @@ func _genYoutubeDownloadScript() {
 			fmt.Fprintf(__vBfIoWriter, "# no-both, so , use vo + ao : %s + %s \n", __ff1, __ff2)
 			_FgetDownloadLine(__vBfIoWriter, __ff1, _vDstMaxAllowVo.url, _vDstMaxAllowVo.protocol)
 			_FgetDownloadLine(__vBfIoWriter, __ff2, _vDstMaxAllowAo.url, _vDstMaxAllowAo.protocol)
+
+			_FgenWavMp3Line(__vBfIoWriter, __ff2)
+			_FgenVoAoLine(__vBfIoWriter, __ff1, _filenameJson+".wav")
 		} else {
 			fmt.Printf("\n\n  no-both , AND no(ao + vo) , what happens ? 1838111. \n\n")
 			os.Exit(180)
@@ -336,10 +355,16 @@ func _genYoutubeDownloadScript() {
 			fmt.Fprintf(__vBfIoWriter, "# both exist, vo exist , use vo + both : %s + %s \n", __ff1, __ff2)
 			_FgetDownloadLine(__vBfIoWriter, __ff1, _vDstMaxAllowVo.url, _vDstMaxAllowVo.protocol)
 			_FgetDownloadLine(__vBfIoWriter, __ff2, _vDstMaxAllowBoth.url, _vDstMaxAllowBoth.protocol)
+
+			_FgenWavMp3Line(__vBfIoWriter, __ff2)
+			_FgenVoAoLine(__vBfIoWriter, __ff1, _filenameJson+".wav")
 		} else { // use both only
 			__ff1 := fmt.Sprintf("%s.bo.%s", _filenameJson, _vDstMaxAllowBoth.ext)
 			fmt.Fprintf(__vBfIoWriter, "# no vo , but both only, so , use both only : %s \n", __ff1)
 			_FgetDownloadLine(__vBfIoWriter, __ff1, _vDstMaxAllowBoth.url, _vDstMaxAllowBoth.protocol)
+
+			_FgenWavMp3Line(__vBfIoWriter, __ff1)
+			_FgenVoAoLine(__vBfIoWriter, __ff1, _filenameJson+".wav")
 		}
 	}
 
