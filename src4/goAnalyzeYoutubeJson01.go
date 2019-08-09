@@ -46,6 +46,7 @@ var (
 	_filenameJson     string = "________________.json"
 	_filenameBase     string = "________________"
 	_filenameDir      string = "________________.dir"
+	_filenamePure     string
 	_jsonByte         []byte
 	_err              error
 	_vstYT00          map[string]interface{}
@@ -328,16 +329,17 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 var _vShugoIndex01 string = `
 cat > %s/_index.md << EOF3
 +++
-title = " %s "
+title = " %s %s "
 description = " %s "
 weight = 20
 +++
 
-{{< mymp4y  mp4y="%s"
+{{< mymp4 mp4="%s" 
+jpg="%s"
 text="len $(cat %s/%s|wc -c)"
 >}}
 
-{{< mymp4x mp4x="%s"
+{{< mymp4x  mp4x="%s"
 text="len $(cat %s/%s|wc -c)"
 >}}
 
@@ -388,10 +390,15 @@ func _genIndexScripForHugo2() {
 
 	fmt.Fprintf(__vBfIoWriter, _vShugoIndex01,
 		_filenameDir,
+		_filenamePure,
 		_vstYT00["fulltitle"],
-		_vstYT00["description"],
+		strings.Replace(strings.Replace(
+			fmt.Sprintf("%s", _vstYT00["description"]),
+			"'", "_", -1),
+			"\"", "_", -1),
 
 		_vFnameVoX,
+		_filenameJson+".jpg",
 		_filenameDir,
 		_vFnameVoX,
 
@@ -527,6 +534,7 @@ func main() {
 	_filenameJson = os.Args[1]
 	_filenameBase = strings.TrimSuffix(_filenameJson, ".json")
 	_filenameDir = _filenameBase + "_dir"
+	_filenamePure = strings.TrimSuffix(_filenameBase, ".info")
 
 	_readJsonFile()
 
