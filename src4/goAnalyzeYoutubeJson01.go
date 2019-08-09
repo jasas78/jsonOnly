@@ -276,16 +276,24 @@ func _genYoutubeDownloadScript() {
 			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _recArr[_vDstMaxAllowVo.idx].ext)
 			__ff2 := fmt.Sprintf("%s.ao.%s", _filenameJson, _recArr[_vDstMaxAllowAo.idx].ext)
 			fmt.Fprintf(__vBfIoWriter, "# no-both, so , use vo + ao : %s + %s \n", __ff1, __ff2)
-			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", _recArr[_vDstMaxAllowVo.idx].url)
+			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", __ff1, _recArr[_vDstMaxAllowVo.idx].url)
+			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", __ff2, _recArr[_vDstMaxAllowAo.idx].url)
 		} else {
-			if _vDstMaxAllowAo.vo1_ao2_both3 == 0 &&
-				_vDstMaxAllowVo.vo1_ao2_both3 == 0 {
-			} else {
-				fmt.Printf("\n\n  no-both , no ao + vo , what happens ? 1838111. \n\n")
-				os.Exit(180)
-			}
+			fmt.Printf("\n\n  no-both , AND no(ao + vo) , what happens ? 1838111. \n\n")
+			os.Exit(180)
 		}
-	} else {
+	} else { // both exist.
+		if _vDstMaxAllowVo.vo1_ao2_both3 != 0 { // use vo && both
+			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _recArr[_vDstMaxAllowVo.idx].ext)
+			__ff2 := fmt.Sprintf("%s.bo.%s", _filenameJson, _recArr[_vDstMaxAllowBoth.idx].ext)
+			fmt.Fprintf(__vBfIoWriter, "# both exist, vo exist , use vo + both : %s + %s \n", __ff1, __ff2)
+			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", __ff1, _recArr[_vDstMaxAllowVo.idx].url)
+			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", __ff2, _recArr[_vDstMaxAllowBoth.idx].url)
+		} else { // use both only
+			__ff1 := fmt.Sprintf("%s.bo.%s", _filenameJson, _recArr[_vDstMaxAllowBoth.idx].ext)
+			fmt.Fprintf(__vBfIoWriter, "# no vo , but both only, so , use both only : %s \n", __ff1)
+			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", __ff1, _recArr[_vDstMaxAllowBoth.idx].url)
+		}
 	}
 
 	fmt.Fprintf(__vBfIoWriter, "\n")
