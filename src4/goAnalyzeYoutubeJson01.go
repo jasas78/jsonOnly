@@ -269,13 +269,19 @@ func _FgenDstCombineLine(___w *bufio.Writer, ___srcVo, ___srcAo , ___dstCo strin
 func _FgenWavMp3Line(___w *bufio.Writer, ___src string) {
 	__vFnameWav := _filenameJson + ".wav"
 	__vFnameMp3 := _filenameJson + ".mp3"
+	__vFnameMpX := _filenameJson + ".25k.mp4"
 	fmt.Fprintf(___w, "rm -f %s \n", __vFnameWav)
 	fmt.Fprintf(___w,
 		"/usr/bin/ffmpeg \\\n    -i %s         \\\n    -vn -ac 1 -ab 25000        "+
 			"\\\n    %s \n",
 		___src, __vFnameWav)
 	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMp3)
-	fmt.Fprintf(___w, "lame       \\\n    %s       \\\n    %s\n", __vFnameWav, __vFnameMp3)
+	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMpX)
+	fmt.Fprintf(___w, "echo lame       \\\n    %s       \\\n    %s\n", __vFnameWav, __vFnameMp3)
+	fmt.Fprintf(___w,
+		"/usr/bin/ffmpeg \\\n    -i %s         \\\n    -vn -ac 1 -ab 25000        "+
+			"\\\n    %s \n",
+		___src, __vFnameMpX)
 }
 
 //func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
