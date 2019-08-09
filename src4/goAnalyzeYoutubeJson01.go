@@ -286,6 +286,9 @@ func _FgenWavMp3Line(___w *bufio.Writer, ___src string) {
 		___src, __vFnameMpX)
 }
 
+var _vYTcmd string = "${HOME}/bin/youtube-dl --ignore-errors --restrict-filenames  "
+// -o '%%(upload_date)s_%(id)s.%%(ext)s'"
+
 //func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
 func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 	__protocol := ___vRec.protocol
@@ -297,7 +300,7 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
 			fmt.Fprintf(___w, "echo wget -c \\\n    -O %s  \\\n    '%s'\n", ___dst, __src1)
-			fmt.Fprintf(___w, "youtube-dl \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n",
+			fmt.Fprintf(___w, _vYTcmd + " \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n",
 				__fmt,
 				___dst, __src2)
 		}
@@ -305,6 +308,9 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
 			fmt.Fprintf(___w, "echo /usr/bin/ffmpeg -i '%s' \\\n    %s \n", __src1, ___dst)
+			fmt.Fprintf(___w, _vYTcmd + " \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n",
+				__fmt,
+				___dst, __src2)
 		}
 	default:
 		{
@@ -334,9 +340,10 @@ func _genIndexScripForHugo2() {
 		_filenameJson,
 		_filenameJson)
 
-	fmt.Fprintf(__vBfIoWriter, "rm -fr               %s\nmkdir -p             %s\nmv %s.*         %s/\n\n",
+	fmt.Fprintf(__vBfIoWriter, "rm -fr               %s\nmkdir -p             %s\nmv %s %s.*         %s/\n\n",
 		_filenameDir,
 		_filenameDir,
+		_filenameJson,
 		_filenameJson,
 		_filenameDir)
 
@@ -465,7 +472,7 @@ func main() {
 	}
 	_filenameJson = os.Args[1]
 	_filenameBase = strings.TrimSuffix(_filenameJson, ".json")
-	_filenameDir = _filenameBase + ".dir"
+	_filenameDir = _filenameBase + "_dir"
 
 	_readJsonFile()
 
