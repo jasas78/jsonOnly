@@ -253,13 +253,16 @@ func _analyzeJsonObj() {
 	}
 }
 
-func _FgenVoAoLine(___w *bufio.Writer, ___srcVo, ___srcAo string) {
-	__vFnameMp4 := _filenameJson + ".mp4"
-	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMp4)
-	fmt.Fprintf(___w,
-		"/usr/bin/ffmpeg \\\n    -i %s  \\\n    -i %s        "+
-			"\\\n    -ac 1 -ab 25000   -map 0:v:0 -map 1:a:0      \\\n    %s \n",
-		___srcVo, ___srcAo, __vFnameMp4)
+func _FgenDstCombineLine(___w *bufio.Writer, ___srcVo, ___srcAo , ___dstCo string) {
+	fmt.Fprintf(___w, "rm -f %s \n", ___dstCo)
+    fmt.Fprintf(___w, "/usr/bin/ffmpeg "+
+    "\\\n    -i %s  " +
+    "\\\n    -i %s        "+
+    "\\\n    -map 0:v:0 -map 1:a:0      " + 
+    "\\\n    -ac 1 -b:a 25000   " + 
+    "\\\n    -c:v copy   " + 
+    "\\\n    %s \n",
+    ___srcVo, ___srcAo, ___dstCo)
 	// https://superuser.com/questions/1137612/ffmpeg-replace-audio-in-video
 }
 
@@ -352,6 +355,8 @@ func _genYoutubeDownloadScript() {
 	__ffVO := fmt.Sprintf("%s.vo.%s", _filenameJson, _vDstMaxAllowVo.ext)
 	__ffAO := fmt.Sprintf("%s.ao.%s", _filenameJson, _vDstMaxAllowAo.ext)
 	__ffBO := fmt.Sprintf("%s.bo.%s", _filenameJson, _vDstMaxAllowBoth.ext)
+	__ffDstVo := fmt.Sprintf("%s.%s", _filenameJson, _vDstMaxAllowVo.ext)
+	__ffDstBo := fmt.Sprintf("%s.%s", _filenameJson, _vDstMaxAllowBoth.ext)
 
 	if _vDstMaxAllowAo.vo1_ao2_both3 != 0 &&
 		_vDstMaxAllowVo.vo1_ao2_both3 != 0 {
@@ -361,7 +366,7 @@ func _genYoutubeDownloadScript() {
 
 		fmt.Fprintf(__vBfIoWriter, "\n")
 		_FgenWavMp3Line(__vBfIoWriter, __ffAO)
-		_FgenVoAoLine(__vBfIoWriter, __ffVO, _filenameJson+".wav")
+		_FgenDstCombineLine(__vBfIoWriter, __ffVO, _filenameJson+".wav", __ffDstVo )
 	} else { // no-Vo or/and no-Ao
 		if _vDstMaxAllowBoth.vo1_ao2_both3 == 0 { // no-both + ( no-Vo or no-Ao)
 			fmt.Printf("\n\n# no-both , AND (no-Ao || no-Vo), what happens ? 1838111. 181 \n\n")
@@ -374,7 +379,7 @@ func _genYoutubeDownloadScript() {
 
 			fmt.Fprintf(__vBfIoWriter, "\n")
 			_FgenWavMp3Line(__vBfIoWriter, __ffBO)
-			_FgenVoAoLine(__vBfIoWriter, __ffVO, _filenameJson+".wav")
+			_FgenDstCombineLine(__vBfIoWriter, __ffVO, _filenameJson+".wav", __ffDstVo )
 		} else {
 			if _vDstMaxAllowAo.vo1_ao2_both3 != 0 { // use both(as vo) + ao
 				fmt.Fprintf(__vBfIoWriter, "# combine183838 21 : use both(vo) + ao : %s + %s \n", __ffBO, __ffAO)
@@ -383,14 +388,14 @@ func _genYoutubeDownloadScript() {
 
 				fmt.Fprintf(__vBfIoWriter, "\n")
 				_FgenWavMp3Line(__vBfIoWriter, __ffAO)
-				_FgenVoAoLine(__vBfIoWriter, __ffBO, _filenameJson+".wav")
+				_FgenDstCombineLine(__vBfIoWriter, __ffBO, _filenameJson+".wav", __ffDstBo )
 			} else { // use both only
 				fmt.Fprintf(__vBfIoWriter, "# combine183838 31 : no vo , but both only, so , use both only : %s \n", __ffBO)
 				_FgetDownloadLine(__vBfIoWriter, __ffBO, _recArr[_vDstMaxAllowBoth.idx])
 
 				fmt.Fprintf(__vBfIoWriter, "\n")
 				_FgenWavMp3Line(__vBfIoWriter, __ffBO)
-				_FgenVoAoLine(__vBfIoWriter, __ffBO, _filenameJson+".wav")
+				_FgenDstCombineLine(__vBfIoWriter, __ffBO, _filenameJson+".wav", __ffDstBo )
 			}
 		}
 	}
