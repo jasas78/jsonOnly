@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"bufio"
 	//"io"
 	//"log"
 	//"strings"
@@ -155,7 +156,7 @@ func _analyzeJsonObj() {
 		}
 
 		for ___idx := 0; ___idx < _recLen; ___idx++ {
-			_s400 += fmt.Sprintf("%d=", 40000+___idx)
+			_s400 += fmt.Sprintf("#%d=", 40000+___idx)
 			_s400 += fmt.Sprintf(" %3s", _recArr[___idx].format_id)
 			_s400 += fmt.Sprintf(" %9d", _recArr[___idx].filesize)
 			_s400 += fmt.Sprintf(" %4s", _recArr[___idx].ext)
@@ -170,14 +171,47 @@ func _analyzeJsonObj() {
 	}
 }
 
-// fmt.Printf("#!/bin/bash\n\n")
+// func fmt.Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error)
+// func os.Create(name string) (*File, error)
+// func bufio.NewWriter(w io.Writer) *Writer
+func    _genYoutubeDownloadScript(){
+    __vFshName := os.Args[1] + ".sh"
+    __vFileSh , __vErr := os.Create( __vFshName )
+	if __vErr != nil {
+		fmt.Printf("Create <%s> failed\n", __vFshName)
+		fmt.Println(__vErr)
+		os.Exit(140)
+    }
+	defer __vFileSh.Close()
+
+    __vBfIoWriter := bufio.NewWriter(__vFileSh)
+    fmt.Fprintf( __vBfIoWriter , "#!/bin/bash\n\n")
+
+    fmt.Fprintf(__vBfIoWriter , "%s\n", _s400)
+
+    fmt.Fprintf(__vBfIoWriter , "wget -c -O %s.jpg\n\n", os.Args[1] )
+
+    //fmt.Fprintf(__vBfIoWriter , "wget -c -O %s.jpg\n\n", os.Args[1] )
+
+    __vBfIoWriter .Flush()
+}
 
 func main() {
 	/*
 	   fmt.Println("Hello World")
+	   // lnx/goAnalyzeYoutubeJson01.lnx.LinuxX64.exe 11 --> 2
+	   // lnx/goAnalyzeYoutubeJson01.lnx.LinuxX64.exe 11 22 --> 3
+	   fmt.Printf(" args len %d \n" , len(os.Args))
+	   os.Exit(100)
 	*/
+	if 2 != len(os.Args) {
+		fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>", len(os.Args), os.Args[0])
+		os.Exit(100)
+	}
+
 	_readJsonFile()
 
 	_analyzeJsonObj()
 
+    _genYoutubeDownloadScript()
 }
