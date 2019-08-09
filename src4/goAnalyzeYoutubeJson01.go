@@ -280,12 +280,14 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
 	case "https":
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
-			fmt.Fprintf(___w, "wget -c -O %s  \\\n    '%s'\n", ___dst, ___src)
+			fmt.Fprintf(___w, "echo wget -c -O %s  \\\n    '%s'\n", ___dst, ___src)
+			fmt.Fprintf(___w, "youtube-dl \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n", 
+            ___dst, ___src)
 		}
 	case "m3u8_native":
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
-			fmt.Fprintf(___w, "/usr/bin/ffmpeg -i '%s' \\\n    %s \n", ___src, ___dst)
+			fmt.Fprintf(___w, "echo /usr/bin/ffmpeg -i '%s' \\\n    %s \n", ___src, ___dst)
 		}
 	default:
 		{
