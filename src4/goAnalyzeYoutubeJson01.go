@@ -24,17 +24,21 @@ type _STyt01 struct {
 	fulltitle   string // "唯有实行普选 才能保障人权",
 	format_id   string // "136+251",
 	uploader    string // "唐柏桥",
+	protocol    string // "https",  "m3u8_native"
 }
 
 type _STrec struct {
-	filesize                            int
-	format_id, ext, vcodec, acodec, url string
+	filesize                                      int
+	format_id, ext, vcodec, acodec, url, protocol string
 }
 
 type _STdst struct {
 	vo1_ao2_both3 int
 	size          int
 	idx           int
+	url           string
+	protocol      string
+	ext           string
 }
 
 var (
@@ -43,7 +47,7 @@ var (
 	_jsonByte         []byte
 	_err              error
 	_vstYT00          map[string]interface{}
-	_vstYT10          []string = []string{"description", "id", "webpage_url", "thumbnail", "fulltitle", "format_id", "upload_date", "uploader"}
+	_vstYT10          []string = []string{"description", "id", "webpage_url", "thumbnail", "fulltitle", "format_id", "upload_date", "uploader", "protocol"}
 	_recLen           int
 	_recArr           []_STrec
 	_s300             string = ""
@@ -156,6 +160,12 @@ func _analyzeJsonObj() {
 						_s300 += fmt.Sprintf(" <%s:%s>", ___key, urlV[:18])
 						_recArr[___idx].url = urlV
 					}
+				case "protocol":
+					{
+						var protocolV string = fmt.Sprintf("%s", ___value)
+						_s300 += fmt.Sprintf(" <%s:%s>", ___key, protocolV)
+						_recArr[___idx].protocol = protocolV
+					}
 				}
 			}
 			_s300 += fmt.Sprintf("\n")
@@ -195,6 +205,9 @@ func _analyzeJsonObj() {
 							_vDstMaxAllowBoth.idx = ___idx
 							_vDstMaxAllowBoth.vo1_ao2_both3 = 3
 							_vDstMaxAllowBoth.size = __fSize
+							_vDstMaxAllowBoth.url = _recArr[___idx].url
+							_vDstMaxAllowBoth.protocol = _recArr[___idx].protocol
+							_vDstMaxAllowBoth.ext = _recArr[___idx].ext
 						}
 					}
 				case 1:
@@ -203,6 +216,9 @@ func _analyzeJsonObj() {
 							_vDstMaxAllowAo.idx = ___idx
 							_vDstMaxAllowAo.vo1_ao2_both3 = 2
 							_vDstMaxAllowAo.size = __fSize
+							_vDstMaxAllowAo.url = _recArr[___idx].url
+							_vDstMaxAllowAo.protocol = _recArr[___idx].protocol
+							_vDstMaxAllowAo.ext = _recArr[___idx].ext
 						}
 					}
 				case 2:
@@ -211,6 +227,9 @@ func _analyzeJsonObj() {
 							_vDstMaxAllowVo.idx = ___idx
 							_vDstMaxAllowVo.vo1_ao2_both3 = 1
 							_vDstMaxAllowVo.size = __fSize
+							_vDstMaxAllowVo.url = _recArr[___idx].url
+							_vDstMaxAllowVo.protocol = _recArr[___idx].protocol
+							_vDstMaxAllowVo.ext = _recArr[___idx].ext
 						}
 					}
 				case 3:
@@ -230,6 +249,10 @@ func _analyzeJsonObj() {
 			fmt.Printf("%s", _s400)
 		}
 	}
+}
+
+func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
+	fmt.Fprintf(___w, "wget -c -O %s  '%s'\n", ___dst, ___src)
 }
 
 // func fmt.Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error)
@@ -254,45 +277,52 @@ func _genYoutubeDownloadScript() {
 
 	//fmt.Fprintf(__vBfIoWriter , "wget -c -O %s.jpg\n\n", os.Args[1] )
 
-	fmt.Fprintf(__vBfIoWriter, "# Name : idx      size vo1_ao2_both3 \n")
-	fmt.Fprintf(__vBfIoWriter, "# Ao   : %3d %9d %1d \n",
-		_vDstMaxAllowAo.idx,
-		_vDstMaxAllowAo.size,
-		_vDstMaxAllowAo.vo1_ao2_both3)
+	fmt.Fprintf(__vBfIoWriter, "# Name : idx      size vo1_ao2_both3   ext   protocol\n")
 
-	fmt.Fprintf(__vBfIoWriter, "# Vo   : %3d %9d %1d \n",
+	fmt.Fprintf(__vBfIoWriter, "# Vo   : %3d %9d %1d              %5s  '%s' \n",
 		_vDstMaxAllowVo.idx,
 		_vDstMaxAllowVo.size,
-		_vDstMaxAllowVo.vo1_ao2_both3)
+		_vDstMaxAllowVo.vo1_ao2_both3,
+		_vDstMaxAllowVo.ext,
+		_recArr[_vDstMaxAllowVo.idx].protocol)
 
-	fmt.Fprintf(__vBfIoWriter, "# Both : %3d %9d %1d \n",
+	fmt.Fprintf(__vBfIoWriter, "# Ao   : %3d %9d %1d              %5s  '%s' \n",
+		_vDstMaxAllowAo.idx,
+		_vDstMaxAllowAo.size,
+		_vDstMaxAllowAo.vo1_ao2_both3,
+		_vDstMaxAllowAo.ext,
+		_recArr[_vDstMaxAllowAo.idx].protocol)
+
+	fmt.Fprintf(__vBfIoWriter, "# Both : %3d %9d %1d              %5s  '%s' \n",
 		_vDstMaxAllowBoth.idx,
 		_vDstMaxAllowBoth.size,
-		_vDstMaxAllowBoth.vo1_ao2_both3)
+		_vDstMaxAllowBoth.vo1_ao2_both3,
+		_vDstMaxAllowBoth.ext,
+		_recArr[_vDstMaxAllowBoth.idx].protocol)
 
 	if _vDstMaxAllowBoth.vo1_ao2_both3 == 0 {
 		if _vDstMaxAllowAo.vo1_ao2_both3 != 0 &&
 			_vDstMaxAllowVo.vo1_ao2_both3 != 0 {
-			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _recArr[_vDstMaxAllowVo.idx].ext)
-			__ff2 := fmt.Sprintf("%s.ao.%s", _filenameJson, _recArr[_vDstMaxAllowAo.idx].ext)
+			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _vDstMaxAllowVo.ext)
+			__ff2 := fmt.Sprintf("%s.ao.%s", _filenameJson, _vDstMaxAllowAo.ext)
 			fmt.Fprintf(__vBfIoWriter, "# no-both, so , use vo + ao : %s + %s \n", __ff1, __ff2)
-			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", __ff1, _recArr[_vDstMaxAllowVo.idx].url)
-			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", __ff2, _recArr[_vDstMaxAllowAo.idx].url)
+			_FgetDownloadLine(__vBfIoWriter, __ff1, _vDstMaxAllowVo.url, _vDstMaxAllowVo.protocol)
+			_FgetDownloadLine(__vBfIoWriter, __ff2, _vDstMaxAllowAo.url, _vDstMaxAllowAo.protocol)
 		} else {
 			fmt.Printf("\n\n  no-both , AND no(ao + vo) , what happens ? 1838111. \n\n")
 			os.Exit(180)
 		}
 	} else { // both exist.
 		if _vDstMaxAllowVo.vo1_ao2_both3 != 0 { // use vo && both
-			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _recArr[_vDstMaxAllowVo.idx].ext)
-			__ff2 := fmt.Sprintf("%s.bo.%s", _filenameJson, _recArr[_vDstMaxAllowBoth.idx].ext)
+			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _vDstMaxAllowVo.ext)
+			__ff2 := fmt.Sprintf("%s.bo.%s", _filenameJson, _vDstMaxAllowBoth.ext)
 			fmt.Fprintf(__vBfIoWriter, "# both exist, vo exist , use vo + both : %s + %s \n", __ff1, __ff2)
-			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", __ff1, _recArr[_vDstMaxAllowVo.idx].url)
-			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", __ff2, _recArr[_vDstMaxAllowBoth.idx].url)
+			_FgetDownloadLine(__vBfIoWriter, __ff1, _vDstMaxAllowVo.url, _vDstMaxAllowVo.protocol)
+			_FgetDownloadLine(__vBfIoWriter, __ff2, _vDstMaxAllowBoth.url, _vDstMaxAllowBoth.protocol)
 		} else { // use both only
-			__ff1 := fmt.Sprintf("%s.bo.%s", _filenameJson, _recArr[_vDstMaxAllowBoth.idx].ext)
+			__ff1 := fmt.Sprintf("%s.bo.%s", _filenameJson, _vDstMaxAllowBoth.ext)
 			fmt.Fprintf(__vBfIoWriter, "# no vo , but both only, so , use both only : %s \n", __ff1)
-			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", __ff1, _recArr[_vDstMaxAllowBoth.idx].url)
+			_FgetDownloadLine(__vBfIoWriter, __ff1, _vDstMaxAllowBoth.url, _vDstMaxAllowBoth.protocol)
 		}
 	}
 
