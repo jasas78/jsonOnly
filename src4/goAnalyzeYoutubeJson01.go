@@ -26,6 +26,10 @@ type _STyt01 struct {
     uploader    string // "唐柏桥",
 }
 
+type _STrec struct {
+    filesize int
+    format_id , ext , vcodec , acodec , url  string
+}
 
 var 
 (
@@ -35,6 +39,10 @@ var
     _err error
     _vstYT00 map[string]interface{}
     _vstYT10 []string = []string{ "description", "id", "webpage_url", "thumbnail", "fulltitle", "format_id", "upload_date", "uploader" }
+    _recLen int
+    _recArr []_STrec
+    _s300 string = ""
+    _s400 string = ""
 )
 
 // func Unmarshal(data []byte, v interface{}) error
@@ -85,7 +93,75 @@ func _analyzeJsonObj() {
             fmt.Printf("%d= %s:=<%v> \n" , 10000+___idx, ___key , _vstYT00[___key] )
         }
     }
+    
+    var _formatsNode interface{} = _vstYT00["formats"]
+    if nil != _formatsNode {
+        fmt.Printf(" formats not nil \n" );
+        //_formatArrs := _formatsNode.([]map[string]interface{})
+        _formatArrs := _formatsNode.([]interface{})
 
+        _recLen = len( _formatArrs )
+        fmt.Printf(" formats len %d \n" , _recLen )
+        _recArr = make([]_STrec , _recLen)
+
+        for ___idx , ___fNode := range _formatArrs {
+            _s300 += fmt.Sprintf("%d= " , 30000+___idx)
+            ___fMap := ___fNode.(map[string]interface{})
+            _recArr[___idx] = _STrec{}
+            for ___key , ___value := range ___fMap {
+                switch ___key {
+                    case "filesize" :{
+                        switch vv := ___value.(type) {
+                        case float64 :
+                            _s300 += fmt.Sprintf(" <%s:%v>" , ___key , int(vv) )
+                            _recArr[___idx].filesize = int(vv)
+
+                        }
+                    }
+                    case "vcodec" , "acodec" , "format_id" , "ext" :{
+                        _s300 += fmt.Sprintf(" <%s:%s>" , ___key, ___value)
+                        switch ___key {
+                            case "vcodec" :{
+                                _recArr[___idx].vcodec = fmt.Sprintf("%s" , ___value)
+                            }
+                            case "acodec" :{
+                                _recArr[___idx].acodec = fmt.Sprintf("%s" , ___value)
+                            }
+                            case "format_id" :{
+                                _recArr[___idx].format_id = fmt.Sprintf("%s" , ___value)
+                            }
+                            case "ext" :{
+                                _recArr[___idx].ext = fmt.Sprintf("%s" , ___value)
+                            }
+                        }
+                    }
+                    case "url" :{
+                        var urlV string = fmt.Sprintf("%s" , ___value)
+                        _s300 += fmt.Sprintf(" <%s:%s>" , ___key, urlV[:18])
+                        _recArr[___idx].url = urlV
+                    }
+                }
+            }
+            _s300 += fmt.Sprintf("\n")
+        }
+        if 30000 == 30001 {
+            fmt.Printf("%s" , _s300)
+        }
+
+        for ___idx := 0; ___idx < _recLen; ___idx++ {
+            _s400 += fmt.Sprintf("%d=" , 40000+___idx )
+            _s400 += fmt.Sprintf(" %3s" , _recArr [___idx] . format_id )
+            _s400 += fmt.Sprintf(" %9d" , _recArr [___idx] . filesize )
+            _s400 += fmt.Sprintf(" %4s" , _recArr [___idx] . ext )
+            _s400 += fmt.Sprintf(" %13s" , _recArr [___idx] . vcodec )
+            _s400 += fmt.Sprintf(" %13s" , _recArr [___idx] . acodec )
+            _s400 += fmt.Sprintf(" %s" , _recArr [___idx] . url  )
+            _s400 += fmt.Sprintf("\n")
+        }
+        if 40000 == 40000 {
+            fmt.Printf("%s" , _s400)
+        }
+    }
 }
 
 func main() {
