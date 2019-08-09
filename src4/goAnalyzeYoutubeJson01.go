@@ -275,23 +275,29 @@ func _FgenWavMp3Line(___w *bufio.Writer, ___src string) {
 	fmt.Fprintf(___w, "lame       \\\n    %s       \\\n    %s\n", __vFnameWav, __vFnameMp3)
 }
 
-func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
-	switch ___protocol {
+//func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
+func _FgetDownloadLine(___w *bufio.Writer, ___dst string , ___vRec _STrec){
+    __protocol := ___vRec.protocol
+    __src1 := ___vRec.url
+    __src2 := _vstYT00["webpage_url"]
+    __fmt := ___vRec.format_id
+	switch __protocol {
 	case "https":
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
-			fmt.Fprintf(___w, "echo wget -c -O %s  \\\n    '%s'\n", ___dst, ___src)
+			fmt.Fprintf(___w, "echo wget -c \\\n    -O %s  \\\n    '%s'\n", ___dst, __src1)
 			fmt.Fprintf(___w, "youtube-dl \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n", 
-            ___dst, ___src)
+            __fmt,
+            ___dst, __src2)
 		}
 	case "m3u8_native":
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
-			fmt.Fprintf(___w, "echo /usr/bin/ffmpeg -i '%s' \\\n    %s \n", ___src, ___dst)
+			fmt.Fprintf(___w, "echo /usr/bin/ffmpeg -i '%s' \\\n    %s \n", __src1, ___dst)
 		}
 	default:
 		{
-			fmt.Printf("\n\n unknown protocol :<%s>\n\n", ___protocol)
+			fmt.Printf("\n\n unknown protocol :<%s>\n\n", __protocol)
 			os.Exit(179)
 		}
 
@@ -349,9 +355,10 @@ func _genYoutubeDownloadScript() {
 			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _vDstMaxAllowVo.ext)
 			__ff2 := fmt.Sprintf("%s.ao.%s", _filenameJson, _vDstMaxAllowAo.ext)
 			fmt.Fprintf(__vBfIoWriter, "# no-both, so , use vo + ao : %s + %s \n", __ff1, __ff2)
-			_FgetDownloadLine(__vBfIoWriter, __ff1, _vDstMaxAllowVo.url, _vDstMaxAllowVo.protocol)
-			_FgetDownloadLine(__vBfIoWriter, __ff2, _vDstMaxAllowAo.url, _vDstMaxAllowAo.protocol)
+			_FgetDownloadLine(__vBfIoWriter, __ff1, _recArr[_vDstMaxAllowVo.idx])
+			_FgetDownloadLine(__vBfIoWriter, __ff2, _recArr[_vDstMaxAllowAo.idx])
 
+			fmt.Fprintf(__vBfIoWriter, "\n" )
 			_FgenWavMp3Line(__vBfIoWriter, __ff2)
 			_FgenVoAoLine(__vBfIoWriter, __ff1, _filenameJson+".wav")
 		} else {
@@ -363,16 +370,18 @@ func _genYoutubeDownloadScript() {
 			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _vDstMaxAllowVo.ext)
 			__ff2 := fmt.Sprintf("%s.bo.%s", _filenameJson, _vDstMaxAllowBoth.ext)
 			fmt.Fprintf(__vBfIoWriter, "# both exist, vo exist , use vo + both : %s + %s \n", __ff1, __ff2)
-			_FgetDownloadLine(__vBfIoWriter, __ff1, _vDstMaxAllowVo.url, _vDstMaxAllowVo.protocol)
-			_FgetDownloadLine(__vBfIoWriter, __ff2, _vDstMaxAllowBoth.url, _vDstMaxAllowBoth.protocol)
+			_FgetDownloadLine(__vBfIoWriter, __ff1, _recArr[_vDstMaxAllowVo.idx])
+			_FgetDownloadLine(__vBfIoWriter, __ff2, _recArr[_vDstMaxAllowBoth.idx])
 
+			fmt.Fprintf(__vBfIoWriter, "\n" )
 			_FgenWavMp3Line(__vBfIoWriter, __ff2)
 			_FgenVoAoLine(__vBfIoWriter, __ff1, _filenameJson+".wav")
 		} else { // use both only
 			__ff1 := fmt.Sprintf("%s.bo.%s", _filenameJson, _vDstMaxAllowBoth.ext)
 			fmt.Fprintf(__vBfIoWriter, "# no vo , but both only, so , use both only : %s \n", __ff1)
-			_FgetDownloadLine(__vBfIoWriter, __ff1, _vDstMaxAllowBoth.url, _vDstMaxAllowBoth.protocol)
+			_FgetDownloadLine(__vBfIoWriter, __ff1, _recArr[_vDstMaxAllowBoth.idx])
 
+			fmt.Fprintf(__vBfIoWriter, "\n" )
 			_FgenWavMp3Line(__vBfIoWriter, __ff1)
 			_FgenVoAoLine(__vBfIoWriter, __ff1, _filenameJson+".wav")
 		}
