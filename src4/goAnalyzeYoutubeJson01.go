@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 	//"io"
 	//"log"
-	//"strings"
 )
 
 type _STyt01 struct {
@@ -44,6 +44,8 @@ type _STdst struct {
 var (
 	_jsonFile         *os.File
 	_filenameJson     string = "________________.json"
+	_filenameBase     string = "________________"
+	_filenameDir      string = "________________.dir"
 	_jsonByte         []byte
 	_err              error
 	_vstYT00          map[string]interface{}
@@ -313,11 +315,40 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 	}
 }
 
+func _genIndexScripForHugo2() {
+	__vFshName := _filenameJson + ".sh2"
+	__vFileSh, __vErr := os.Create(__vFshName)
+	if __vErr != nil {
+		fmt.Printf("Create <%s> failed\n", __vFshName)
+		fmt.Println(__vErr)
+		os.Exit(140)
+	}
+	defer __vFileSh.Close()
+
+	__vBfIoWriter := bufio.NewWriter(__vFileSh)
+	fmt.Fprintf(__vBfIoWriter, "#!/bin/bash\n\n")
+
+	fmt.Fprintf(__vBfIoWriter, "rm -f \\\n    %s.vo.* \\\n    %s.ao.* \\\n    %s.bo.* \\\n    %s.wav \n\n",
+		_filenameJson,
+		_filenameJson,
+		_filenameJson,
+		_filenameJson)
+
+	fmt.Fprintf(__vBfIoWriter, "rm -fr               %s\nmkdir -p             %s\nmv %s.*         %s/\n\n",
+		_filenameDir,
+		_filenameDir,
+		_filenameJson,
+		_filenameDir)
+
+	fmt.Fprintf(__vBfIoWriter, "\n")
+	__vBfIoWriter.Flush()
+} // _genIndexScripForHugo2
+
 // func fmt.Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error)
 // func os.Create(name string) (*File, error)
 // func bufio.NewWriter(w io.Writer) *Writer
-func _genYoutubeDownloadScript() {
-	__vFshName := os.Args[1] + ".sh1"
+func _genYoutubeDownloadScript1() {
+	__vFshName := _filenameJson + ".sh1"
 	__vFileSh, __vErr := os.Create(__vFshName)
 	if __vErr != nil {
 		fmt.Printf("Create <%s> failed\n", __vFshName)
@@ -331,9 +362,9 @@ func _genYoutubeDownloadScript() {
 
 	fmt.Fprintf(__vBfIoWriter, "%s\n", _s400)
 
-	fmt.Fprintf(__vBfIoWriter, "wget -c -O %s.jpg \\\n    '%s' \n\n", os.Args[1], _vstYT00["thumbnail"])
+	fmt.Fprintf(__vBfIoWriter, "wget -c -O %s.jpg \\\n    '%s' \n\n", _filenameJson, _vstYT00["thumbnail"])
 
-	//fmt.Fprintf(__vBfIoWriter , "wget -c -O %s.jpg\n\n", os.Args[1] )
+	//fmt.Fprintf(__vBfIoWriter , "wget -c -O %s.jpg\n\n", _filenameJson )
 
 	fmt.Fprintf(__vBfIoWriter, "# Name : idx      size vo1_ao2_both3   ext   protocol\n")
 
@@ -418,7 +449,7 @@ func _genYoutubeDownloadScript() {
 
 	fmt.Fprintf(__vBfIoWriter, "\n")
 	__vBfIoWriter.Flush()
-}
+} // _genYoutubeDownloadScript1
 
 func main() {
 	/*
@@ -433,10 +464,14 @@ func main() {
 		os.Exit(100)
 	}
 	_filenameJson = os.Args[1]
+	_filenameBase = strings.TrimSuffix(_filenameJson, ".json")
+	_filenameDir = _filenameBase + ".dir"
 
 	_readJsonFile()
 
 	_analyzeJsonObj()
 
-	_genYoutubeDownloadScript()
+	_genYoutubeDownloadScript1()
+
+	_genIndexScripForHugo2()
 }
