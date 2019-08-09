@@ -179,7 +179,8 @@ func _analyzeJsonObj() {
 			_s400 += fmt.Sprintf("\n")
 
 			__fSize := _recArr[___idx].filesize
-			if __fSize != 0 {
+			//if __fSize != 0 {
+			if __fSize >= 0 {
 				var __vSign = 0
 				if _recArr[___idx].vcodec == "" || _recArr[___idx].vcodec == "none" {
 					__vSign = 1
@@ -190,7 +191,7 @@ func _analyzeJsonObj() {
 				switch __vSign {
 				case 0:
 					{ // both vo & ao
-						if __fSize < 50000000 && __fSize > _vDstMaxAllowBoth.size {
+						if __fSize < 50000000 && __fSize >= _vDstMaxAllowBoth.size {
 							_vDstMaxAllowBoth.idx = ___idx
 							_vDstMaxAllowBoth.vo1_ao2_both3 = 3
 							_vDstMaxAllowBoth.size = __fSize
@@ -198,7 +199,7 @@ func _analyzeJsonObj() {
 					}
 				case 1:
 					{ // vo null , ao only
-						if __fSize < 45000000 && __fSize > _vDstMaxAllowAo.size {
+						if __fSize < 45000000 && __fSize >= _vDstMaxAllowAo.size {
 							_vDstMaxAllowAo.idx = ___idx
 							_vDstMaxAllowAo.vo1_ao2_both3 = 2
 							_vDstMaxAllowAo.size = __fSize
@@ -206,7 +207,7 @@ func _analyzeJsonObj() {
 					}
 				case 2:
 					{ // ao null , vo only
-						if __fSize < 35000000 && __fSize > _vDstMaxAllowVo.size {
+						if __fSize < 35000000 && __fSize >= _vDstMaxAllowVo.size {
 							_vDstMaxAllowVo.idx = ___idx
 							_vDstMaxAllowVo.vo1_ao2_both3 = 1
 							_vDstMaxAllowVo.size = __fSize
@@ -253,7 +254,7 @@ func _genYoutubeDownloadScript() {
 
 	//fmt.Fprintf(__vBfIoWriter , "wget -c -O %s.jpg\n\n", os.Args[1] )
 
-	fmt.Fprintf(__vBfIoWriter, "# Name : idx size   vo1_ao2_both3 \n")
+	fmt.Fprintf(__vBfIoWriter, "# Name : idx      size vo1_ao2_both3 \n")
 	fmt.Fprintf(__vBfIoWriter, "# Ao   : %3d %9d %1d \n",
 		_vDstMaxAllowAo.idx,
 		_vDstMaxAllowAo.size,
@@ -269,6 +270,25 @@ func _genYoutubeDownloadScript() {
 		_vDstMaxAllowBoth.size,
 		_vDstMaxAllowBoth.vo1_ao2_both3)
 
+	if _vDstMaxAllowBoth.vo1_ao2_both3 == 0 {
+		if _vDstMaxAllowAo.vo1_ao2_both3 != 0 &&
+			_vDstMaxAllowVo.vo1_ao2_both3 != 0 {
+			__ff1 := fmt.Sprintf("%s.vo.%s", _filenameJson, _recArr[_vDstMaxAllowVo.idx].ext)
+			__ff2 := fmt.Sprintf("%s.ao.%s", _filenameJson, _recArr[_vDstMaxAllowAo.idx].ext)
+			fmt.Fprintf(__vBfIoWriter, "# no-both, so , use vo + ao : %s + %s \n", __ff1, __ff2)
+			fmt.Fprintf(__vBfIoWriter, "wget -c -O %s  '%s'\n", _recArr[_vDstMaxAllowVo.idx].url)
+		} else {
+			if _vDstMaxAllowAo.vo1_ao2_both3 == 0 &&
+				_vDstMaxAllowVo.vo1_ao2_both3 == 0 {
+			} else {
+				fmt.Printf("\n\n  no-both , no ao + vo , what happens ? 1838111. \n\n")
+				os.Exit(180)
+			}
+		}
+	} else {
+	}
+
+	fmt.Fprintf(__vBfIoWriter, "\n")
 	__vBfIoWriter.Flush()
 }
 
@@ -284,7 +304,7 @@ func main() {
 		fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>", len(os.Args), os.Args[0])
 		os.Exit(100)
 	}
-	_filenameJson     = os.Args[1]
+	_filenameJson = os.Args[1]
 
 	_readJsonFile()
 
