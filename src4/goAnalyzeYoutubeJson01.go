@@ -252,7 +252,24 @@ func _analyzeJsonObj() {
 }
 
 func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
-	fmt.Fprintf(___w, "wget -c -O %s  '%s'\n", ___dst, ___src)
+	switch ___protocol {
+	case "https":
+		{
+			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
+			fmt.Fprintf(___w, "wget -c -O %s  '%s'\n", ___dst, ___src)
+		}
+	case "m3u8_native":
+		{
+			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
+			fmt.Fprintf(___w, "/usr/bin/ffmpeg -i '%s' %s \n", ___src, ___dst)
+		}
+	default:
+		{
+			fmt.Printf("\n\n unknown protocol :<%s>\n\n", ___protocol)
+			os.Exit(179)
+		}
+
+	}
 }
 
 // func fmt.Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error)
