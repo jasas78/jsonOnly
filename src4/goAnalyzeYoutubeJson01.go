@@ -311,7 +311,7 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 // func os.Create(name string) (*File, error)
 // func bufio.NewWriter(w io.Writer) *Writer
 func _genYoutubeDownloadScript() {
-	__vFshName := os.Args[1] + ".sh"
+	__vFshName := os.Args[1] + ".sh1"
 	__vFileSh, __vErr := os.Create(__vFshName)
 	if __vErr != nil {
 		fmt.Printf("Create <%s> failed\n", __vFshName)
