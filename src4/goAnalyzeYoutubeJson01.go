@@ -58,6 +58,8 @@ var (
 	_vDstMaxAllowVo   _STdst
 	_vDstMaxAllowAo   _STdst
 	_vDstMaxAllowBoth _STdst
+	_vFnameMpX        string
+	_vFnameVoX        string
 )
 
 // func Unmarshal(data []byte, v interface{}) error
@@ -256,6 +258,7 @@ func _analyzeJsonObj() {
 }
 
 func _FgenDstCombineLine(___w *bufio.Writer, ___srcVo, ___srcAo, ___dstCo string) {
+	_vFnameVoX = ___dstCo
 	fmt.Fprintf(___w, "rm -f %s \n", ___dstCo)
 	fmt.Fprintf(___w, "/usr/bin/ffmpeg "+
 		"\\\n    -i %s  "+
@@ -271,22 +274,23 @@ func _FgenDstCombineLine(___w *bufio.Writer, ___srcVo, ___srcAo, ___dstCo string
 func _FgenWavMp3Line(___w *bufio.Writer, ___src string) {
 	__vFnameWav := _filenameJson + ".wav"
 	__vFnameMp3 := _filenameJson + ".mp3"
-	__vFnameMpX := _filenameJson + ".25k.mp4"
+	_vFnameMpX = _filenameJson + ".25k.mp4"
 	fmt.Fprintf(___w, "rm -f %s \n", __vFnameWav)
 	fmt.Fprintf(___w,
 		"/usr/bin/ffmpeg \\\n    -i %s         \\\n    -vn -ac 1 -ar 22050 -b:a 25000        "+
 			"\\\n    %s \n",
 		___src, __vFnameWav)
 	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMp3)
-	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMpX)
+	fmt.Fprintf(___w, "rm -f %s \n", _vFnameMpX)
 	fmt.Fprintf(___w, "echo lame       \\\n    %s       \\\n    %s\n", __vFnameWav, __vFnameMp3)
 	fmt.Fprintf(___w,
 		"/usr/bin/ffmpeg \\\n    -i %s         \\\n    -vn -ac 1 -ar 22050 -b:a 25000        "+
 			"\\\n    %s \n",
-		___src, __vFnameMpX)
+		___src, _vFnameMpX)
 }
 
 var _vYTcmd string = "${HOME}/bin/youtube-dl --ignore-errors --restrict-filenames  "
+
 // -o '%%(upload_date)s_%(id)s.%%(ext)s'"
 
 //func _FgetDownloadLine(___w *bufio.Writer, ___dst, ___src, ___protocol string) {
@@ -300,7 +304,7 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
 			fmt.Fprintf(___w, "echo wget -c \\\n    -O %s  \\\n    '%s'\n", ___dst, __src1)
-			fmt.Fprintf(___w, _vYTcmd + " \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n",
+			fmt.Fprintf(___w, _vYTcmd+" \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n",
 				__fmt,
 				___dst, __src2)
 		}
@@ -308,7 +312,7 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
 			fmt.Fprintf(___w, "echo /usr/bin/ffmpeg -i '%s' \\\n    %s \n", __src1, ___dst)
-			fmt.Fprintf(___w, _vYTcmd + " \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n",
+			fmt.Fprintf(___w, _vYTcmd+" \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n",
 				__fmt,
 				___dst, __src2)
 		}
@@ -320,6 +324,41 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 
 	}
 }
+
+var _vShugoIndex01 string = `
+cat > %s/_index.md << EOF3
++++
+title = " %s "
+description = " %s "
+weight = 20
++++
+
+{{< mymp4y  mp4y="%s"
+text="len $(cat %s/%s|wc -c)"
+>}}
+
+{{< mymp4x mp4x="%s"
+text="len $(cat %s/%s|wc -c)"
+>}}
+
+
+%s
+
+
+<br>
+请大家传播时，不需要传播文件本身，<br>
+原因是：一旦传播过大东西（例如，图片，文件），<br>
+就会触发检查机制。<br>
+我不知道检查机制的触发条件。<br>
+但是我知道，不会说你传一个没有敏感词的网络地址都检查，<br>
+否则，检查员得累死。<br><br>
+直接转发网址就可以了：<br>
+原因是，这是程序员网站，<br>
+共匪不敢封锁，墙内可以直接下载。
+
+EOF3
+
+`
 
 func _genIndexScripForHugo2() {
 	__vFshName := _filenameJson + ".sh2"
@@ -346,6 +385,21 @@ func _genIndexScripForHugo2() {
 		_filenameJson,
 		_filenameJson,
 		_filenameDir)
+
+	fmt.Fprintf(__vBfIoWriter, _vShugoIndex01,
+		_filenameDir,
+		_vstYT00["fulltitle"],
+		_vstYT00["description"],
+
+		_vFnameVoX,
+		_filenameDir,
+		_vFnameVoX,
+
+		_vFnameMpX,
+		_filenameDir,
+		_vFnameMpX,
+
+		_vstYT00["webpage_url"])
 
 	fmt.Fprintf(__vBfIoWriter, "\n")
 	__vBfIoWriter.Flush()
