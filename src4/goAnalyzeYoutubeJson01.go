@@ -297,8 +297,11 @@ func _FgenDstCombineLine(___w *bufio.Writer, ___srcVo, ___srcAo, ___dstCo string
 		"\\\n    -map 0:v:0 -map 1:a:0      "+
 		"\\\n    -ac 1 -ar 22050 -b:a 25000   "+
 		"\\\n    -c:v copy   "+
-		"\\\n    %s \n",
-		___srcVo, ___srcAo, _vFnameVoX)
+        "\\\n    %s "+
+        "\\\n    && echo 'ok     :gen %s'"+
+        "\\\n    || echo 'failed :gen %s'"+
+        "\n",
+		___srcVo, ___srcAo, _vFnameVoX , _vFnameVoX , _vFnameVoX )
 	// https://superuser.com/questions/1137612/ffmpeg-replace-audio-in-video
 }
 
