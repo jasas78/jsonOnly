@@ -114,7 +114,10 @@ func _analyzeJsonObj() {
 	}
 	_vDescription01 =
 		strings.Replace(strings.Replace(
+		strings.Replace(strings.Replace(
 			fmt.Sprintf("%s", _vstYT00["description"]),
+			"\n", "_", -1),
+			"\r", "_", -1),
 			"'", "_", -1),
 			"\"", "_", -1)
 	if 123 == 123 {
