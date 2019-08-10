@@ -114,10 +114,10 @@ func _analyzeJsonObj() {
 	}
 	_vDescription01 =
 		strings.Replace(strings.Replace(
-		strings.Replace(strings.Replace(
-			fmt.Sprintf("%s", _vstYT00["description"]),
-			"\n", "_", -1),
-			"\r", "_", -1),
+			strings.Replace(strings.Replace(
+				fmt.Sprintf("%s", _vstYT00["description"]),
+				"\n", "_", -1),
+				"\r", "_", -1),
 			"'", "_", -1),
 			"\"", "_", -1)
 	if 123 == 123 {
@@ -178,7 +178,7 @@ func _analyzeJsonObj() {
 						_recArr[___idx].url = urlV
 					}
 				case "width":
-                    {
+					{
 						switch vv := ___value.(type) {
 						case float64:
 							_s300 += fmt.Sprintf(" <%s:%v>", ___key, int(vv))
@@ -229,7 +229,8 @@ func _analyzeJsonObj() {
 				switch __vSign {
 				case 0:
 					{ // both vo & ao
-						if __fSize < 50000000 && __fSize >= _vDstMaxAllowBoth.size {
+						if __fSize < 50000000 &&
+							(__fSize > _vDstMaxAllowBoth.size || _vDstMaxAllowBoth.vo1_ao2_both3 == 0) {
 							_vDstMaxAllowBoth.idx = ___idx
 							_vDstMaxAllowBoth.vo1_ao2_both3 = 3
 							_vDstMaxAllowBoth.size = __fSize
@@ -240,7 +241,8 @@ func _analyzeJsonObj() {
 					}
 				case 1:
 					{ // vo null , ao only
-						if __fSize < 45000000 && __fSize >= _vDstMaxAllowAo.size {
+						if __fSize < 45000000 &&
+							(__fSize > _vDstMaxAllowAo.size || _vDstMaxAllowAo.vo1_ao2_both3 == 0) {
 							_vDstMaxAllowAo.idx = ___idx
 							_vDstMaxAllowAo.vo1_ao2_both3 = 2
 							_vDstMaxAllowAo.size = __fSize
@@ -251,7 +253,8 @@ func _analyzeJsonObj() {
 					}
 				case 2:
 					{ // ao null , vo only
-						if __fSize < 35000000 && __fSize >= _vDstMaxAllowVo.size {
+						if __fSize < 35000000 &&
+							(__fSize > _vDstMaxAllowVo.size || _vDstMaxAllowVo.vo1_ao2_both3 == 0) {
 							_vDstMaxAllowVo.idx = ___idx
 							_vDstMaxAllowVo.vo1_ao2_both3 = 1
 							_vDstMaxAllowVo.size = __fSize
@@ -328,7 +331,7 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 	__src2 := _vstYT00["webpage_url"]
 	__fmt := ___vRec.format_id
 	switch __protocol {
-	case "https" , "http_dash_segments" :
+	case "https", "http_dash_segments":
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
 			fmt.Fprintf(___w, "echo echo wget -c \\\n    -O %s  \\\n    '%s'\n", ___dst, __src1)
