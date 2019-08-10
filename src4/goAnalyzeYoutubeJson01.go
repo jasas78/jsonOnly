@@ -295,7 +295,7 @@ func _FgenWavMp3Line(___w *bufio.Writer, ___src string) {
 		___src, __vFnameWav)
 	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMp3)
 	fmt.Fprintf(___w, "rm -f %s \n", _vFnameMpX)
-	fmt.Fprintf(___w, "echo lame       \\\n    %s       \\\n    %s\n", __vFnameWav, __vFnameMp3)
+	fmt.Fprintf(___w, "echo echo lame       \\\n    %s       \\\n    %s\n", __vFnameWav, __vFnameMp3)
 	fmt.Fprintf(___w,
 		"/usr/bin/ffmpeg \\\n    -i %s         \\\n    -vn -ac 1 -ar 22050 -b:a 25000        "+
 			"\\\n    %s \n",
@@ -316,7 +316,7 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 	case "https" , "http_dash_segments" :
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
-			fmt.Fprintf(___w, "echo wget -c \\\n    -O %s  \\\n    '%s'\n", ___dst, __src1)
+			fmt.Fprintf(___w, "echo echo wget -c \\\n    -O %s  \\\n    '%s'\n", ___dst, __src1)
 			fmt.Fprintf(___w, _vYTcmd+" \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n",
 				__fmt,
 				___dst, __src2)
@@ -324,7 +324,7 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 	case "m3u8_native":
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
-			fmt.Fprintf(___w, "echo /usr/bin/ffmpeg -i '%s' \\\n    %s \n", __src1, ___dst)
+			fmt.Fprintf(___w, "echo echo /usr/bin/ffmpeg -i '%s' \\\n    %s \n", __src1, ___dst)
 			fmt.Fprintf(___w, _vYTcmd+" \\\n    -f %s \\\n    -o %s  \\\n    '%s'\n",
 				__fmt,
 				___dst, __src2)
