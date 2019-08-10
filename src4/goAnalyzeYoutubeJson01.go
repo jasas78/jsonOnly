@@ -327,6 +327,9 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 }
 
 var _vShugoIndex01 string = `
+
+mv  %s/%s %s/%s
+
 cat > %s/_index.md << EOF3
 +++
 title = " %s %s "
@@ -335,7 +338,6 @@ weight = 20
 +++
 
 {{< mymp4 mp4="%s" 
-jpg="%s"
 text="len $(cat %s/%s|wc -c)"
 >}}
 
@@ -390,6 +392,11 @@ func _genIndexScripForHugo2() {
 
 	fmt.Fprintf(__vBfIoWriter, _vShugoIndex01,
 		_filenameDir,
+		_filenameJson + ".jpg",
+		_filenameDir,
+		_vFnameVoX + ".jpg",
+
+		_filenameDir,
 		_filenamePure,
 		_vstYT00["fulltitle"],
 		strings.Replace(strings.Replace(
@@ -398,7 +405,6 @@ func _genIndexScripForHugo2() {
 			"\"", "_", -1),
 
 		_vFnameVoX,
-		_filenameJson+".jpg",
 		_filenameDir,
 		_vFnameVoX,
 
