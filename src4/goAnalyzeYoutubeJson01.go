@@ -313,7 +313,7 @@ func _FgetDownloadLine(___w *bufio.Writer, ___dst string, ___vRec _STrec) {
 	__src2 := _vstYT00["webpage_url"]
 	__fmt := ___vRec.format_id
 	switch __protocol {
-	case "https":
+	case "https" , "http_dash_segments" :
 		{
 			fmt.Fprintf(___w, "rm -f %s \n", ___dst)
 			fmt.Fprintf(___w, "echo wget -c \\\n    -O %s  \\\n    '%s'\n", ___dst, __src1)
