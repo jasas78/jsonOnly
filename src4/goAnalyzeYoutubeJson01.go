@@ -265,8 +265,14 @@ func _analyzeJsonObj() {
 }
 
 func _FgenDstCombineLine(___w *bufio.Writer, ___srcVo, ___srcAo, ___dstCo string) {
-	_vFnameVoX = ___dstCo
-	fmt.Fprintf(___w, "rm -f %s \n", ___dstCo)
+	__tmpExt1 := strings.TrimSuffix(___dstCo, ".webm")
+	if __tmpExt1 == ___dstCo {
+		_vFnameVoX = ___dstCo
+	} else {
+		_vFnameVoX = ___dstCo + ".mp4"
+	}
+
+	fmt.Fprintf(___w, "rm -f %s \n", _vFnameVoX)
 	fmt.Fprintf(___w, "/usr/bin/ffmpeg "+
 		"\\\n    -i %s  "+
 		"\\\n    -i %s        "+
@@ -274,7 +280,7 @@ func _FgenDstCombineLine(___w *bufio.Writer, ___srcVo, ___srcAo, ___dstCo string
 		"\\\n    -ac 1 -ar 22050 -b:a 25000   "+
 		"\\\n    -c:v copy   "+
 		"\\\n    %s \n",
-		___srcVo, ___srcAo, ___dstCo)
+		___srcVo, ___srcAo, _vFnameVoX)
 	// https://superuser.com/questions/1137612/ffmpeg-replace-audio-in-video
 }
 
