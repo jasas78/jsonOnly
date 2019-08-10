@@ -28,13 +28,14 @@ type _STyt01 struct {
 }
 
 type _STrec struct {
-	filesize                                      int
+	filesize, width                               int
 	format_id, ext, vcodec, acodec, url, protocol string
 }
 
 type _STdst struct {
 	vo1_ao2_both3 int
 	size          int
+	width         int
 	idx           int
 	url           string
 	protocol      string
@@ -173,6 +174,15 @@ func _analyzeJsonObj() {
 						_s300 += fmt.Sprintf(" <%s:%s>", ___key, urlV[:18])
 						_recArr[___idx].url = urlV
 					}
+				case "width":
+                    {
+						switch vv := ___value.(type) {
+						case float64:
+							_s300 += fmt.Sprintf(" <%s:%v>", ___key, int(vv))
+							_recArr[___idx].width = int(vv)
+
+						}
+					}
 				case "protocol":
 					{
 						var protocolV string = fmt.Sprintf("%s", ___value)
@@ -195,10 +205,11 @@ func _analyzeJsonObj() {
 			_s400 += fmt.Sprintf("#%d=", 40000+___idx)
 			_s400 += fmt.Sprintf(" %3s", _recArr[___idx].format_id)
 			_s400 += fmt.Sprintf(" %9d", _recArr[___idx].filesize)
+			_s400 += fmt.Sprintf(" %5d", _recArr[___idx].width)
 			_s400 += fmt.Sprintf(" %4s", _recArr[___idx].ext)
 			_s400 += fmt.Sprintf(" %13s", _recArr[___idx].vcodec)
 			_s400 += fmt.Sprintf(" %13s", _recArr[___idx].acodec)
-			_s400 += fmt.Sprintf(" %13s", _recArr[___idx].protocol)
+			_s400 += fmt.Sprintf(" '%19s'", _recArr[___idx].protocol)
 			_s400 += fmt.Sprintf(" %s", _recArr[___idx].url)
 			_s400 += fmt.Sprintf("\n")
 
@@ -533,7 +544,7 @@ func _genYoutubeDownloadScript1() {
 		fmt.Fprintf(__vBfIoWriter, "%s", _s200)
 	}
 
-	if 30004 == 30005 {
+	if 30004 == 30004 {
 		fmt.Fprintf(__vBfIoWriter, "\n")
 		fmt.Fprintf(__vBfIoWriter, "%s", _s300)
 	}
