@@ -61,6 +61,7 @@ var (
 	_vDstMaxAllowBoth _STdst
 	_vFnameMpX        string
 	_vFnameVoX        string
+	_vDescription01   string
 )
 
 // func Unmarshal(data []byte, v interface{}) error
@@ -110,6 +111,11 @@ func _analyzeJsonObj() {
 	for ___idx, ___key := range _vstYT10 {
 		_s200 += fmt.Sprintf("#%d= %s:=<%v> \n", 10000+___idx, ___key, _vstYT00[___key])
 	}
+	_vDescription01 =
+		strings.Replace(strings.Replace(
+			fmt.Sprintf("%s", _vstYT00["description"]),
+			"'", "_", -1),
+			"\"", "_", -1)
 	if 123 == 123 {
 		fmt.Printf("%s", _s200)
 	}
@@ -346,10 +352,14 @@ text="len $(cat %s/%s|wc -c)"
 >}}
 
 
-%s
+{{< mydiv text="%s" >}}
+<br>
+
+{{< mydiv text="%s" >}}
 
 
 <br>
+
 请大家传播时，不需要传播文件本身，<br>
 原因是：一旦传播过大东西（例如，图片，文件），<br>
 就会触发检查机制。<br>
@@ -359,6 +369,7 @@ text="len $(cat %s/%s|wc -c)"
 直接转发网址就可以了：<br>
 原因是，这是程序员网站，<br>
 共匪不敢封锁，墙内可以直接下载。
+
 
 EOF3
 
@@ -392,17 +403,14 @@ func _genIndexScripForHugo2() {
 
 	fmt.Fprintf(__vBfIoWriter, _vShugoIndex01,
 		_filenameDir,
-		_filenameJson + ".jpg",
+		_filenameJson+".jpg",
 		_filenameDir,
-		_vFnameVoX + ".jpg",
+		_vFnameVoX+".jpg",
 
 		_filenameDir,
 		_filenamePure,
 		_vstYT00["fulltitle"],
-		strings.Replace(strings.Replace(
-			fmt.Sprintf("%s", _vstYT00["description"]),
-			"'", "_", -1),
-			"\"", "_", -1),
+		_vDescription01,
 
 		_vFnameVoX,
 		_filenameDir,
@@ -411,6 +419,8 @@ func _genIndexScripForHugo2() {
 		_vFnameMpX,
 		_filenameDir,
 		_vFnameMpX,
+
+		_vDescription01,
 
 		_vstYT00["webpage_url"])
 
