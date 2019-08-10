@@ -198,6 +198,7 @@ func _analyzeJsonObj() {
 			_s400 += fmt.Sprintf(" %4s", _recArr[___idx].ext)
 			_s400 += fmt.Sprintf(" %13s", _recArr[___idx].vcodec)
 			_s400 += fmt.Sprintf(" %13s", _recArr[___idx].acodec)
+			_s400 += fmt.Sprintf(" %13s", _recArr[___idx].protocol)
 			_s400 += fmt.Sprintf(" %s", _recArr[___idx].url)
 			_s400 += fmt.Sprintf("\n")
 
