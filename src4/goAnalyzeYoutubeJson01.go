@@ -576,8 +576,8 @@ func main() {
 	*/
 	if 2 != len(os.Args) {
 		fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>\n\n"+
-			"    for aa1 in *.json ; do %s ${aa1} ;echo . ./%s.sh1 >> z1.txt;echo . ./%s.sh2 >> z2.txt; done\n\n",
-			len(os.Args), os.Args[0], os.Args[0], os.Args[0], os.Args[0])
+			"    for aa1 in *.json ; do %s ${aa1} ;echo . ./${aa1}.sh1 >> z1.txt;echo . ./${aa1}.sh2 >> z2.txt; done\n\n",
+			len(os.Args), os.Args[0], os.Args[0])
 		os.Exit(100)
 	}
 	_filenameJson = os.Args[1]
