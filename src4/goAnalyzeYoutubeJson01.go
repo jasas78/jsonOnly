@@ -109,9 +109,6 @@ func _analyzeJsonObj() {
 	}
 
 	//fmt.Printf(" JSON description 00 <%v> \n" , _vstYT00["description"] )
-	for ___idx, ___key := range _vstYT10 {
-		_s200 += fmt.Sprintf("#%d= %s:=<%v> \n", 10000+___idx, ___key, _vstYT00[___key])
-	}
 	_vDescription01 =
 		strings.Replace(strings.Replace(
 			strings.Replace(strings.Replace(
@@ -120,6 +117,13 @@ func _analyzeJsonObj() {
 				"\r", "_", -1),
 			"'", "_", -1),
 			"\"", "_", -1)
+	for ___idx, ___key := range _vstYT10 {
+        if ___key == "description" {
+            _s200 += fmt.Sprintf("#%d= %s:=<%v> \n", 10000+___idx, ___key, _vDescription01)
+        } else {
+            _s200 += fmt.Sprintf("#%d= %s:=<%v> \n", 10000+___idx, ___key, _vstYT00[___key])
+        }
+	}
 	if 123 == 123 {
 		fmt.Printf("%s", _s200)
 	}
