@@ -302,8 +302,8 @@ func _FgenDstCombineLine(___w *bufio.Writer, ___srcVo, ___srcAo, ___dstCo string
 		"\\\n    -ac 1 -ar 22050 -b:a 25000   "+
 		"\\\n    -c:v copy   "+
 		"\\\n    %s "+
-		"\\\n    && echo 'ok     :gen %s' >> result.txt "+
-		"\\\n    || echo 'failed :gen %s' >> result.txt "+
+		"\\\n    && (echo 'ok     :gen %s' >> result.txt )"+
+		"\\\n    || (echo 'failed :gen %s' >> result.txt )"+
 		"\n",
 		___srcVo, ___srcAo, _vFnameVoX, _vFnameVoX, _vFnameVoX)
 	// https://superuser.com/questions/1137612/ffmpeg-replace-audio-in-video
@@ -576,7 +576,7 @@ func main() {
 	*/
 	if 2 != len(os.Args) {
 		fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>\n\n"+
-			"    for aa1 in *.json ; do %s ${aa1} ; done\n\n",
+			"    for aa1 in *.json ; do %s ${aa1} ;echo . ./${aa1}.sh1 >> z1.txt;echo . ./${aa1}.sh2 >> z2.txt; done\n\n",
 			len(os.Args), os.Args[0], os.Args[0])
 		os.Exit(100)
 	}
