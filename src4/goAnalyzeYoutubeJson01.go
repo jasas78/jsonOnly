@@ -575,7 +575,7 @@ func main() {
 	   os.Exit(100)
 	*/
 	if 2 != len(os.Args) {
-		fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>", len(os.Args), os.Args[0])
+		fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>\n\n", len(os.Args), os.Args[0])
 		os.Exit(100)
 	}
 	_filenameJson = os.Args[1]
