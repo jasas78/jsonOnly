@@ -118,11 +118,11 @@ func _analyzeJsonObj() {
 			"'", "_", -1),
 			"\"", "_", -1)
 	for ___idx, ___key := range _vstYT10 {
-        if ___key == "description" {
-            _s200 += fmt.Sprintf("#%d= %s:=<%v> \n", 10000+___idx, ___key, _vDescription01)
-        } else {
-            _s200 += fmt.Sprintf("#%d= %s:=<%v> \n", 10000+___idx, ___key, _vstYT00[___key])
-        }
+		if ___key == "description" {
+			_s200 += fmt.Sprintf("#%d= %s:=<%v> \n", 10000+___idx, ___key, _vDescription01)
+		} else {
+			_s200 += fmt.Sprintf("#%d= %s:=<%v> \n", 10000+___idx, ___key, _vstYT00[___key])
+		}
 	}
 	if 123 == 123 {
 		fmt.Printf("%s", _s200)
@@ -301,11 +301,11 @@ func _FgenDstCombineLine(___w *bufio.Writer, ___srcVo, ___srcAo, ___dstCo string
 		"\\\n    -map 0:v:0 -map 1:a:0      "+
 		"\\\n    -ac 1 -ar 22050 -b:a 25000   "+
 		"\\\n    -c:v copy   "+
-        "\\\n    %s "+
-        "\\\n    && echo 'ok     :gen %s' >> result.txt "+
-        "\\\n    || echo 'failed :gen %s' >> result.txt "+
-        "\n",
-		___srcVo, ___srcAo, _vFnameVoX , _vFnameVoX , _vFnameVoX )
+		"\\\n    %s "+
+		"\\\n    && echo 'ok     :gen %s' >> result.txt "+
+		"\\\n    || echo 'failed :gen %s' >> result.txt "+
+		"\n",
+		___srcVo, ___srcAo, _vFnameVoX, _vFnameVoX, _vFnameVoX)
 	// https://superuser.com/questions/1137612/ffmpeg-replace-audio-in-video
 }
 
@@ -575,7 +575,9 @@ func main() {
 	   os.Exit(100)
 	*/
 	if 2 != len(os.Args) {
-		fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>\n\n", len(os.Args), os.Args[0])
+		fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>\n\n"+
+			"    for aa1 in *.json ; do %s ${aa1} ; done\n\n",
+			len(os.Args), os.Args[0], os.Args[0])
 		os.Exit(100)
 	}
 	_filenameJson = os.Args[1]
