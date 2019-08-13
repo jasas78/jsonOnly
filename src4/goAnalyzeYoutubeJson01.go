@@ -209,7 +209,7 @@ func _analyzeJsonObj() {
 		_vDstMaxAllowBoth = _STdst{}
 
 		for ___idx := 0; ___idx < _recLen; ___idx++ {
-			_s400 += fmt.Sprintf("#%d=", 40000+___idx)
+			_s400 += fmt.Sprintf("#%d/%d=", 40000+___idx, _recLen)
 			_s400 += fmt.Sprintf(" %3s", _recArr[___idx].format_id)
 			_s400 += fmt.Sprintf(" %9d", _recArr[___idx].filesize)
 			_s400 += fmt.Sprintf(" %5d", _recArr[___idx].width)
@@ -269,7 +269,8 @@ func _analyzeJsonObj() {
 					}
 				case 3:
 					{ // vo null , ao null , shit.
-						fmt.Printf(" 100053 : not-vo, not-ao , what is this ? \n")
+						fmt.Printf(" 100053 : not-vo, not-ao , what is this ? idx %d \n" , ___idx )
+						fmt.Printf(" 100054 : \n %s\n\n" , _s400 )
 						os.Exit(143)
 					}
 				default:
