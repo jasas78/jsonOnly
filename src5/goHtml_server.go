@@ -97,7 +97,27 @@ var _Fanswers []string = []string{
 
 var _lenFanswers int = len(_Fanswers) - 1
 
+var _Fmt01 string = `
+
+<html>
+<body>
+<h1>
+<br>
+
+`
+
+var _Fmt02 string = `
+<br>
+</h1>
+</body>
+</html>
+
+`
+
 func _FrandomSentense() (___Srt string) {
 	//return fmt.Sprintf( "\n<port:%s>\n", ___Url)
-	return fmt.Sprintf("\n<%s>\n", _Fanswers[rand.Intn(_lenFanswers)])
+	//return fmt.Sprintf("\n<%s>\n",
+	return fmt.Sprintf(_Fmt01 +
+		_Fanswers[rand.Intn(_lenFanswers)] +
+		_Fmt02)
 }
