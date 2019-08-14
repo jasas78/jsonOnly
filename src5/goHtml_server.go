@@ -42,4 +42,5 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 			r.RemoteAddr)
 	*/
 	fmt.Fprintf(w, r.RemoteAddr)
+	fmt.Fprintf(w, "\n%s", r.Host)
 }
