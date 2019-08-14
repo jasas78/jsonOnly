@@ -63,6 +63,7 @@ var (
 	_vFnameMpX        string
 	_vFnameVoX        string
 	_vDescription01   string
+    _vForceLargeMulti int = 1
 )
 
 // func Unmarshal(data []byte, v interface{}) error
@@ -233,7 +234,7 @@ func _analyzeJsonObj() {
 				switch __vSign {
 				case 0:
 					{ // both vo & ao
-						if __fSize < 50000000 &&
+						if __fSize < (50000000*_vForceLargeMulti) &&
 							(__fSize > _vDstMaxAllowBoth.size || _vDstMaxAllowBoth.vo1_ao2_both3 == 0) {
 							_vDstMaxAllowBoth.idx = ___idx
 							_vDstMaxAllowBoth.vo1_ao2_both3 = 3
@@ -245,7 +246,7 @@ func _analyzeJsonObj() {
 					}
 				case 1:
 					{ // vo null , ao only
-						if __fSize < 45000000 &&
+						if __fSize < (45000000*_vForceLargeMulti) &&
 							(__fSize > _vDstMaxAllowAo.size || _vDstMaxAllowAo.vo1_ao2_both3 == 0) {
 							_vDstMaxAllowAo.idx = ___idx
 							_vDstMaxAllowAo.vo1_ao2_both3 = 2
@@ -257,7 +258,7 @@ func _analyzeJsonObj() {
 					}
 				case 2:
 					{ // ao null , vo only
-						if __fSize < 35000000 &&
+						if __fSize < (35000000*_vForceLargeMulti) &&
 							(__fSize > _vDstMaxAllowVo.size || _vDstMaxAllowVo.vo1_ao2_both3 == 0) {
 							_vDstMaxAllowVo.idx = ___idx
 							_vDstMaxAllowVo.vo1_ao2_both3 = 1
@@ -575,13 +576,20 @@ func main() {
 	   fmt.Printf(" args len %d \n" , len(os.Args))
 	   os.Exit(100)
 	*/
-	if 2 != len(os.Args) {
-		fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>\n\n"+
-			"    for aa1 in *.json ; do %s ${aa1} ;echo . ./${aa1}.sh1 >> z1.txt;echo . ./${aa1}.sh2 >> z2.txt; done\n\n",
-			len(os.Args), os.Args[0], os.Args[0])
-		os.Exit(100)
+	if 2 == len(os.Args) {
+        _filenameJson = os.Args[1]
+    } else {
+	    if 3 == len(os.Args) && os.Args[1] == "-f" {
+            _filenameJson = os.Args[2]
+            _vForceLargeMulti = 2
+        } else {
+            fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>\n\n"+
+            "    for aa1 in *.json ; do %s ${aa1} ;"+
+            "echo . ./${aa1}.sh1 >> z1.txt;echo . ./${aa1}.sh2 >> z2.txt; done\n\n",
+            len(os.Args), os.Args[0], os.Args[0])
+            os.Exit(100)
+        }
 	}
-	_filenameJson = os.Args[1]
 	_filenameBase = strings.TrimSuffix(_filenameJson, ".json")
 	_filenameDir = _filenameBase + "_dir"
 	_filenamePure = strings.TrimSuffix(_filenameBase, ".info")
