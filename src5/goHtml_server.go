@@ -100,6 +100,7 @@ var _lenFanswers int = len(_Fanswers) - 1
 var _Fmt01 string = `
 
 <html>
+<title> 调戏五毛专用 </title>
 <body>
 <div Width="800px" style="width:800px; border:1px solid black;" >
 <h1>
