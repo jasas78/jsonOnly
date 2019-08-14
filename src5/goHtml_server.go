@@ -101,10 +101,8 @@ var _Fmt01 string = `
 
 <html>
 <body>
-<div style="width:800px;text-align: center;">
-<div style="text-align: left; width:855px; border:1px; solid:black;" >
+<div Width="800px" style="width:800px; border:1px solid black;" >
 <h1>
-<br>
 
 `
 
@@ -112,7 +110,6 @@ var _Fmt02 string = `
 
 <br>
 </h1>
-</div>
 </div>
 </body>
 </html>
