@@ -63,7 +63,7 @@ var (
 	_vFnameMpX        string
 	_vFnameVoX        string
 	_vDescription01   string
-    _vForceLargeMulti int = 1
+	_vForceLargeMulti int = 1
 )
 
 // func Unmarshal(data []byte, v interface{}) error
@@ -577,18 +577,18 @@ func main() {
 	   os.Exit(100)
 	*/
 	if 2 == len(os.Args) {
-        _filenameJson = os.Args[1]
-    } else {
-	    if 3 == len(os.Args) && os.Args[1] == "-f" {
-            _filenameJson = os.Args[2]
-            _vForceLargeMulti = 2
-        } else {
-            fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>\n\n"+
-            "    for aa1 in *.json ; do %s ${aa1} ;"+
-            "echo . ./${aa1}.sh1 >> z1.txt;echo . ./${aa1}.sh2 >> z2.txt; done\n\n",
-            len(os.Args), os.Args[0], os.Args[0])
-            os.Exit(100)
-        }
+		_filenameJson = os.Args[1]
+	} else {
+		if 3 == len(os.Args) && os.Args[1] == "-f" {
+			_filenameJson = os.Args[2]
+			_vForceLargeMulti = 2
+		} else {
+			fmt.Printf("\n\n  args len %d \n Usage : %s <filename.json>\n\n"+
+				"    for aa1 in *.json ; do %s ${aa1} ;"+
+				"echo . ./${aa1}.sh1 >> z1.txt;echo . ./${aa1}.sh2 >> z2.txt; done\n\n",
+				len(os.Args), os.Args[0], os.Args[0])
+			os.Exit(100)
+		}
 	}
 	_filenameBase = strings.TrimSuffix(_filenameJson, ".json")
 	_filenameDir = _filenameBase + "_dir"
