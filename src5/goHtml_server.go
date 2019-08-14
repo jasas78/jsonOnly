@@ -101,7 +101,8 @@ var _Fmt01 string = `
 
 <html>
 <body>
-<div Width="90%%%%" max-width="800px"  style="border:1px max-width:800px  solid black;" >
+<div style="width:800px;text-align: center;">
+<div style="text-align: left; width:855px; border:1px; solid:black;" >
 <h1>
 <br>
 
@@ -112,6 +113,7 @@ var _Fmt02 string = `
 <br>
 </h1>
 </div>
+</div>
 </body>
 </html>
 
@@ -120,7 +122,7 @@ var _Fmt02 string = `
 func _FrandomSentense() (___Srt string) {
 	//return fmt.Sprintf( "\n<port:%s>\n", ___Url)
 	//return fmt.Sprintf("\n<%s>\n",
-	return fmt.Sprintf(_Fmt01 +
+	return _Fmt01 +
 		_Fanswers[rand.Intn(_lenFanswers)] +
-		_Fmt02)
+		_Fmt02
 }
