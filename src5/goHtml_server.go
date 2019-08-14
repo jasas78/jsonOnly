@@ -101,7 +101,7 @@ var _Fmt01 string = `
 
 <html>
 <body>
-<div Width="90%" style="border:1px solid black;" >
+<div Width="90%" max-width="800px"  style="border:1px max-width:800px  solid black;" >
 <h1>
 <br>
 
