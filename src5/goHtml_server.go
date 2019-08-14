@@ -41,6 +41,19 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 			r.URL.Path[1:],
 			r.RemoteAddr)
 	*/
-	fmt.Fprintf(w, r.RemoteAddr)
-	fmt.Fprintf(w, "\n%s", r.Host)
+	switch r.Host {
+	case "ttt.jjj123.com":
+		{
+			fmt.Fprintf(w, _FrandomSentense( r.URL.Port() ))
+		}
+	default:
+		{
+			fmt.Fprintf(w, r.RemoteAddr)
+			fmt.Fprintf(w, "\n<%s>\n", r.Host)
+		}
+	}
+}
+
+func _FrandomSentense(___Url string ) (___Srt string){
+    return fmt.Sprintf( "\n<port:%s>\n", ___Url)
 }

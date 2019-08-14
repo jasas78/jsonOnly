@@ -269,8 +269,8 @@ func _analyzeJsonObj() {
 					}
 				case 3:
 					{ // vo null , ao null , shit.
-						fmt.Printf(" 100053 : not-vo, not-ao , what is this ? idx %d \n" , ___idx )
-						fmt.Printf(" 100054 : \n %s\n\n" , _s400 )
+						fmt.Printf(" 100053 : not-vo, not-ao , what is this ? idx %d \n", ___idx)
+						fmt.Printf(" 100054 : \n %s\n\n", _s400)
 						os.Exit(143)
 					}
 				default:
