@@ -60,7 +60,8 @@ var (
 	_vDstMaxAllowVo   _STdst
 	_vDstMaxAllowAo   _STdst
 	_vDstMaxAllowBoth _STdst
-	_vFnameMpX        string
+    _vFnameMpX25      string
+	_vFnameMpX48      string
 	_vFnameVoX        string
 	_vDescription01   string
 	_vForceLargeMulti int = 1
@@ -314,19 +315,27 @@ func _FgenDstCombineLine(___w *bufio.Writer, ___srcVo, ___srcAo, ___dstCo string
 func _FgenWavMp3Line(___w *bufio.Writer, ___src string) {
 	__vFnameWav := _filenameJson + ".wav"
 	__vFnameMp3 := _filenameJson + ".mp3"
-	_vFnameMpX = _filenameJson + ".25k.mp4"
+	_vFnameMpX25 = _filenameJson + ".25k.mp4"
+	_vFnameMpX48 = _filenameJson + ".48k.mp4"
 	fmt.Fprintf(___w, "rm -f %s \n", __vFnameWav)
 	fmt.Fprintf(___w,
 		"/usr/bin/ffmpeg \\\n    -i %s         \\\n    -vn -ac 1 -ar 22050 -b:a 25000        "+
 			"\\\n    %s \n",
 		___src, __vFnameWav)
 	fmt.Fprintf(___w, "rm -f %s \n", __vFnameMp3)
-	fmt.Fprintf(___w, "rm -f %s \n", _vFnameMpX)
 	fmt.Fprintf(___w, "echo echo lame       \\\n    %s       \\\n    %s\n", __vFnameWav, __vFnameMp3)
+
+	fmt.Fprintf(___w, "rm -f %s \n", _vFnameMpX25)
 	fmt.Fprintf(___w,
 		"/usr/bin/ffmpeg \\\n    -i %s         \\\n    -vn -ac 1 -ar 22050 -b:a 25000        "+
 			"\\\n    %s \n",
-		___src, _vFnameMpX)
+		___src, _vFnameMpX25)
+
+	fmt.Fprintf(___w, "rm -f %s \n", _vFnameMpX48)
+	fmt.Fprintf(___w,
+		"/usr/bin/ffmpeg \\\n    -i %s         \\\n    -vn -ac 1 -ar 44100 -b:a 48000        "+
+			"\\\n    %s \n",
+		___src, _vFnameMpX48)
 }
 
 var _vYTcmd string = "${HOME}/bin/youtube-dl --ignore-errors --restrict-filenames  "
@@ -384,11 +393,15 @@ text="len $(cat %s/%s|wc -c)"
 text="len $(cat %s/%s|wc -c)"
 >}}
 
+{{< mymp4x  mp4x="%s"
+text="len $(cat %s/%s|wc -c)"
+>}}
+
 
 {{< mydiv text="%s" >}}
 <br>
 
-{{< mydiv text="%s" >}}
+{{< mydiv link="%s" >}}
 
 
 <br>
@@ -449,9 +462,13 @@ func _genIndexScripForHugo2() {
 		_filenameDir,
 		_vFnameVoX,
 
-		_vFnameMpX,
+		_vFnameMpX25,
 		_filenameDir,
-		_vFnameMpX,
+		_vFnameMpX25,
+
+		_vFnameMpX48,
+		_filenameDir,
+		_vFnameMpX48,
 
 		_vDescription01,
 
