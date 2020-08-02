@@ -1,7 +1,8 @@
 #!/bin/bash
 
 sleep 1
-echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
+test      -f /proc/sys/net/ipv6/conf/all/disable_ipv6 && \
+    echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 
 sleep 1
 nohup  /root/jsonOnly/objSaved/goHtml_server.lnx.LinuxX64.80.exe > /dev/null &
@@ -10,11 +11,9 @@ sleep 1
 
 
 ## check : /etc/crontab
-nohup bash /delete_unknown.sh &
-sleep 1
+#nohup bash /delete_unknown.sh &
+#sleep 1
 
-root@v22:~/jsonOnly# cat /delete_unknown.sh
-#/bin/bash
 for aa1 in \
 /bin/note     \
 /etc/my.conf    \
@@ -29,14 +28,17 @@ for aa1 in \
 /usr/bin/bsd-port \
 
 do
-rm -f ${aa1}.bak01
-mv ${aa1} ${aa1}.bak01
-echo > ${aa1}
+    if [ -f ${aa1} ] ; then
+        rm -f ${aa1}.bak01
+        mv ${aa1} ${aa1}.bak01
+        echo > ${aa1}
+    fi
 done
 
 
 echo ' the following is the crackjack files '
-find /bin/ -size 1135000c
-find /usr/bin/ -size 1135000c
+echo 'find /bin/ -size 1135000c'
+echo 'find /usr/bin/ -size 1135000c'
+echo
 
 
