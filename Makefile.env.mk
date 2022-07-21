@@ -6,6 +6,7 @@ CFGmakeRun:=Makefile.run.go01.mk
 GoTOP:=go2019_0208_1414pm__udp_hold
 GoTOP:= \
 	goAnalyzeYoutubeJson01 \
+	goHtml_server2 \
 	goHtml_server \
 	goHtml_cgi01 \
 	udp_7001__json_generator \
@@ -63,6 +64,7 @@ jpg_gen_index:=   jpg_gen_index
 
 goAnalyzeYoutubeJson01 := goAnalyzeYoutubeJson01 
 goHtml_server:= 	goHtml_server
+goHtml_server2:= 	goHtml_server2
 goHtml_cgi01:= 	goHtml_cgi01
 
 udp_7001__json_generator:= 	$(udp_base__group01)		\

@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"net"
+	//"net"
 	"net/http"
 	"time"
 )
@@ -31,12 +31,14 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	//l, err := net.Listen("tcp4", ":38080")
-	l, err := net.Listen("tcp4", ":80")
+	//l, err := net.Listen("tcp4", ":80")
+	//if err != nil { log.Fatal(err) }
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Fatal(http.Serve(l, sm))
+	//log.Fatal(http.Serve(l, sm))
+    _server := &http.Server{Addr: "0.0.0.0:3030", Handler: sm}
+    _server.SetKeepAlivesEnabled(false)
+    log.Fatal(_server.ListenAndServe())
+
 }
 
 func HelloServer(w http.ResponseWriter, r *http.Request) {
