@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	//"net"
+	"net"
 	"net/http"
 	"time"
 )
@@ -35,9 +35,20 @@ func main() {
 	//if err != nil { log.Fatal(err) }
 
 	//log.Fatal(http.Serve(l, sm))
-    _server := &http.Server{Addr: "0.0.0.0:3030", Handler: sm}
+    //_server := &http.Server{Addr: "0.0.0.0:3030", Handler: sm}
+    /*
+    _server := &http.Server{Addr: "0.0.0.0:80", Handler: sm}
     _server.SetKeepAlivesEnabled(false)
     log.Fatal(_server.ListenAndServe())
+    */
+
+	_lis, err := net.Listen("tcp4", ":80")
+	if err != nil { log.Fatal(err) }
+
+    _server := &http.Server{Addr: "0.0.0.0:80", Handler: sm}
+    _server.SetKeepAlivesEnabled(false)
+    //log.Fatal(_server.ListenAndServe())
+    log.Fatal(_server.Serve(_lis))
 
 }
 
