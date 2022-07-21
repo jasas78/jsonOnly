@@ -45,8 +45,10 @@ func main() {
 	_lis, err := net.Listen("tcp4", ":80")
 	if err != nil { log.Fatal(err) }
 
-    _server := &http.Server{Addr: "0.0.0.0:80", Handler: sm}
+    //_server := &http.Server{Addr: "0.0.0.0:80", Handler: sm}
+    _server := http.Server{ Handler: sm }
     _server.SetKeepAlivesEnabled(false)
+    _server.ReadTimeout = 10000
     //log.Fatal(_server.ListenAndServe())
     log.Fatal(_server.Serve(_lis))
 
